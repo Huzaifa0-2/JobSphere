@@ -86,10 +86,24 @@ export const updateJob = createAsyncThunk(
   }
 );
 
+// SEARCH jobs
+export const searchJobs = createAsyncThunk(
+  "jobs/searchJobs",
+  async (params) => {
+    const query = new URLSearchParams(params).toString();
+
+    const res = await fetch(`http://localhost:5000/jobs/search?${query}`);
+    return await res.json();
+  }
+);
+
+
 const jobSlice = createSlice({
   name: "jobs",
   initialState: {
     jobs: [],
+    searchResults: [],
+    loading: false,
     status: "idle"
   },
   reducers: {},
@@ -101,7 +115,7 @@ const jobSlice = createSlice({
       .addCase(fetchJobs.fulfilled, (state, action) => {
         state.jobs = action.payload;
       })
-      .addCase(fetchApplications.fulfilled, (state, action) => {        
+      .addCase(fetchApplications.fulfilled, (state, action) => {
         state.applications = action.payload;
       })
       .addCase(addJob.fulfilled, (state, action) => {
@@ -114,6 +128,9 @@ const jobSlice = createSlice({
         state.jobs = state.jobs.map(job =>
           job._id === action.payload._id ? action.payload : job
         );
+      })
+      .addCase(searchJobs.fulfilled, (state, action) => {
+        state.searchResults = action.payload;
       });
   }
 });

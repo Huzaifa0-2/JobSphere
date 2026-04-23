@@ -1,7 +1,7 @@
 const Job = require("../models/Job");
 
 // GET all jobs
-exports.getJobs = async (req, res) => {
+exports.getAllJobs = async (req, res) => {
   const jobs = await Job.find();
   res.json(jobs);
 };

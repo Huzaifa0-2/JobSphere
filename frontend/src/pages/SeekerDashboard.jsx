@@ -15,24 +15,15 @@ import {
 function SeekerDashboard() {
     const [applications, setApplications] = useState([]);
     const [selectedJobId, setSelectedJobId] = useState(null);
-    const [searchJobs, setSearchJobs] = useState([]);
     const [hasSearched, setHasSearched] = useState(false);
 
     const dispatch = useDispatch();
-    const { jobs } = useSelector((state) => state.jobs);
+    const { jobs, searchResults } = useSelector((state) => state.jobs);
 
     const { user } = useUser();
     const userId = user?.id;
 
-
-    // const fetchApplications = () => {
-    //     if (!userId) return;
-
-    //     fetch(`http://localhost:5000/applications/user/${userId}`)
-    //         .then(res => res.json())
-    //         .then(data => setApplications(data));
-    // };
-
+    // Fetch applications for the seeker he applied to
     const fetchApplications = async () => {
         if (!userId) return;
         dispatch(fetchApplications(userId));
@@ -43,16 +34,13 @@ function SeekerDashboard() {
         dispatch(fetchAllJobs());
     }, []);
 
-    const jobsToShow = hasSearched ? searchJobs : jobs;
+    const jobsToShow = hasSearched ? searchResults : jobs;
 
     return (
         <div>
 
             <h1>Seeker Dashboard</h1>
-            <SearchFilter setJobs={setSearchJobs} setHasSearched={setHasSearched} />
-            {/* <button onClick={() =>  setHasSearched(false)}>
-                Clear Search
-            </button> */}
+            <SearchFilter setHasSearched={setHasSearched} />
 
             <h2>All Jobs</h2>
 
@@ -72,29 +60,7 @@ function SeekerDashboard() {
                 </div>
             ))}
 
-            {/* {jobs.map(job => (
-                <div key={job._id} style={{ border: "1px solid black", margin: "10px" }}>
-                    <p>Title: {job.title}</p>
-                    <p>Salary: {job.salary}</p>
-                    <p>Location: {job.location}</p>
-
-                    <button style={{ marginLeft: "10px" }} onClick={() => setSelectedJobId(job._id)}>
-                        Apply
-                    </button>
-                </div>
-            ))}
-
-            <h1>search jobs</h1>
-            <SearchFilter setJobs={setSearchJobs} />
-            {searchJobs.map(job => {
-                <div key={job._id} style={{ border: "1px solid black", margin: "10px" }}>
-                    <p>Title: {job.title}</p>
-                    <p>Salary: {job.salary}</p>
-                    <p>Location: {job.location}</p>
-                </div>
-            })} */}
             {selectedJobId && <ApplyForm jobId={selectedJobId} />}
-
 
             <button onClick={fetchApplications}>View My Applications</button>
 
@@ -112,9 +78,6 @@ function SeekerDashboard() {
 
                         </div>
                     ))}
-
-                    {/* <SeekerDashboard />
-                    <EmployerDashboard /> */}
 
                 </div>
             )}
