@@ -110,3 +110,36 @@ exports.getEmployerJobs = async (req, res) => {
     res.status(500).json({ message: "Error fetching jobs" });
   }
 };
+
+
+// Search jobs
+exports.searchJobs = async (req, res) => {
+  try {
+    const { title, location, minSalary } = req.query;
+
+    let query = {};
+
+    // TITLE SEARCH (partial match)
+    if (title) {
+      query.title = { $regex: title, $options: "i" }; // Mean find anything that contains the word, case-insensitive
+    }
+
+    // LOCATION FILTER
+    if (location) {
+      query.location = { $regex: location, $options: "i" };
+    }
+
+    // SALARY FILTER
+    if (minSalary !== undefined && minSalary !== "") {
+      query.salary = { $gte: Number(minSalary) };
+    }
+
+    // Greater than or equal to minSalary
+    const jobs = await Job.find(query);
+
+    res.json(jobs);
+
+  } catch (error) {
+    res.status(500).json({ message: "Search failed" });
+  }
+};

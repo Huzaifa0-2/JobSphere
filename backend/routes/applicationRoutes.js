@@ -5,12 +5,10 @@ const upload = require("../middleware/upload");
 const {
   applyJob,
   getApplicationsByJob,
-  updateApplicationStatus
+  updateApplicationStatus,
+  getApplicationsByUser,
 } = require("../controllers/applicationController");
 
-const {
-  getApplicationsByUser
-} = require("../controllers/applicationController");
 
 router.get("/job/:jobId", getApplicationsByJob);
 router.put("/:id", updateApplicationStatus);

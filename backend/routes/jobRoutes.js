@@ -6,7 +6,8 @@ const {
   createJob,
   deleteJob,
   updateJob,
-  getEmployerJobs
+  getEmployerJobs,
+  searchJobs,
 } = require("../controllers/jobController");
 
 router.get("/", getJobs);
@@ -16,6 +17,6 @@ router.put("/:id", updateJob);
 
 router.get("/employer/:userId", getEmployerJobs);
 
-
+router.get("/search", searchJobs);
 
 module.exports = router;
