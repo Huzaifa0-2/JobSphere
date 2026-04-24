@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import { useNavigate, Link } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { useUser } from "@clerk/clerk-react";
 import {
@@ -7,13 +8,19 @@ import {
   deleteJob,
   updateJob
 } from "../features/jobs/jobSlice";
-import { 
-  Briefcase, 
-  MapPin, 
-  DollarSign, 
-  Trash2, 
-  Edit, 
-  Eye, 
+
+import {
+  fetchJobApplications,
+  updateApplicationStatus,
+} from "../features/applications/applicationSlice";
+
+import {
+  Briefcase,
+  MapPin,
+  DollarSign,
+  Trash2,
+  Edit,
+  Eye,
   Users,
   Plus,
   X,
@@ -25,8 +32,11 @@ import {
 } from "lucide-react";
 
 function EmployerDashboard() {
+  const navigate = useNavigate();
   const dispatch = useDispatch();
   const { jobs } = useSelector(state => state.jobs);
+  const { applications } = useSelector(state => state.applications);
+
   const { user } = useUser();
 
   const [title, setTitle] = useState("");
@@ -35,16 +45,16 @@ function EmployerDashboard() {
   const [editId, setEditId] = useState(null);
   const [showForm, setShowForm] = useState(false);
 
-  const [applications, setApplications] = useState([]);
+  // const [applications, setApplications] = useState([]);
   const [selectedJobId, setSelectedJobId] = useState(null);
 
-  // ✅ Fetch employer jobs using Redux
+  // Fetch an employer's jobs using Redux
   useEffect(() => {
     if (!user) return;
     dispatch(fetchJobs(user.id));
   }, [user]);
 
-  // ✅ Submit Job
+  // Submit Job
   const handleSubmit = (e) => {
     e.preventDefault();
 
@@ -85,35 +95,20 @@ function EmployerDashboard() {
     }
   };
 
-  // ✅ Fetch Applicants (NORMAL FETCH — correct approach)
+  // Fetch Applicants (NORMAL FETCH — correct approach)
   const fetchApplications = async (jobId) => {
     setSelectedJobId(jobId);
-
-    const res = await fetch(`http://localhost:5000/applications/job/${jobId}`);
-    const data = await res.json();
-
-    setApplications(data);
+    dispatch(fetchJobApplications(jobId));
+    // setApplications(data);
   };
 
-  // ✅ Accept / Reject
+  // Accept / Reject
   const updateStatus = async (id, status) => {
-    const res = await fetch(`http://localhost:5000/applications/${id}`, {
-      method: "PUT",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ status })
-    });
-
-    const updated = await res.json();
-
-    setApplications(prev =>
-      prev.map(app =>
-        app._id === id ? updated : app
-      )
-    );
+    dispatch(updateApplicationStatus({ id, status }));
   };
 
   const getStatusColor = (status) => {
-    switch(status) {
+    switch (status) {
       case 'accepted': return 'text-green-600 bg-green-50';
       case 'rejected': return 'text-red-600 bg-red-50';
       default: return 'text-yellow-600 bg-yellow-50';
@@ -121,7 +116,7 @@ function EmployerDashboard() {
   };
 
   const getStatusIcon = (status) => {
-    switch(status) {
+    switch (status) {
       case 'accepted': return <CheckCircle className="w-4 h-4" />;
       case 'rejected': return <XCircle className="w-4 h-4" />;
       default: return <Clock className="w-4 h-4" />;
@@ -149,7 +144,7 @@ function EmployerDashboard() {
             </div>
           </div>
         </div>
-        
+
         <div className="bg-white rounded-xl p-4 shadow-sm border border-gray-100">
           <div className="flex items-center justify-between">
             <div>
@@ -275,7 +270,7 @@ function EmployerDashboard() {
                     </div>
                   </div>
                 </div>
-                
+
                 <div className="flex flex-wrap gap-2">
                   <button
                     onClick={() => fetchApplications(job._id)}
@@ -284,7 +279,7 @@ function EmployerDashboard() {
                     <Eye className="w-4 h-4" />
                     Applicants
                   </button>
-                  
+
                   <button
                     onClick={() => {
                       setEditId(job._id);
@@ -298,7 +293,7 @@ function EmployerDashboard() {
                     <Edit className="w-4 h-4" />
                     Edit
                   </button>
-                  
+
                   <button
                     onClick={() => handleDelete(job._id)}
                     className="flex items-center gap-1 px-3 py-1.5 bg-red-50 text-red-600 rounded-lg hover:bg-red-100 transition-colors text-sm font-medium"
@@ -350,7 +345,7 @@ function EmployerDashboard() {
                         <p className="text-sm text-gray-500">Applied for: {app.jobId?.title}</p>
                       </div>
                     </div>
-                    
+
                     {app.resumeUrl && (
                       <a
                         href={app.resumeUrl}
@@ -369,7 +364,7 @@ function EmployerDashboard() {
                       {getStatusIcon(app.status)}
                       <span className="capitalize">{app.status || "Pending"}</span>
                     </div>
-                    
+
                     <div className="flex gap-2">
                       <button
                         onClick={() => updateStatus(app._id, "accepted")}
@@ -378,7 +373,7 @@ function EmployerDashboard() {
                         <CheckCircle className="w-4 h-4" />
                         Accept
                       </button>
-                      
+
                       <button
                         onClick={() => updateStatus(app._id, "rejected")}
                         className="flex items-center gap-1 px-3 py-1.5 bg-red-50 text-red-600 rounded-lg hover:bg-red-100 transition-colors text-sm font-medium"
@@ -386,6 +381,10 @@ function EmployerDashboard() {
                         <XCircle className="w-4 h-4" />
                         Reject
                       </button>
+
+<Link to={`/profile/${app.userId}`}>
+    <button>View Profile</button>
+</Link>
                     </div>
                   </div>
                 </div>

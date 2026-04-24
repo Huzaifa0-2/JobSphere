@@ -28,7 +28,7 @@ exports.getApplicationsByJob = async (req, res) => {
         const { jobId } = req.params;
 
         // const applications = await Application.find({ jobId });
-        const applications = await Application.find({ jobId }).populate("jobId");
+        const applications = await Application.find({ jobId }).populate("jobId"); // Take ref from model and add all data of job from jobId
 
         res.json(applications);
 

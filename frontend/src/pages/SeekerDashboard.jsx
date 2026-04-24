@@ -3,15 +3,23 @@ import { useUser } from "@clerk/clerk-react";
 import { useSelector, useDispatch } from "react-redux";
 import ApplyForm from "../components/ApplyForm";
 import SearchFilter from "../components/SearchFilter";
+import SeekerProfile from "../components/ManageSeekerProfile";
+
 import {
     fetchAllJobs,
-    fetchUserApplications,
 } from "../features/jobs/jobSlice";
-import { 
-    Briefcase, 
-    MapPin, 
-    DollarSign, 
-    Send, 
+
+import {
+    applyJob,
+    fetchUserApplications
+} from "../features/applications/applicationSlice";
+
+
+import {
+    Briefcase,
+    MapPin,
+    DollarSign,
+    Send,
     FileText,
     Clock,
     CheckCircle,
@@ -25,8 +33,9 @@ function SeekerDashboard() {
     const [showApplications, setShowApplications] = useState(false);
 
     const dispatch = useDispatch();
-    const { jobs, searchResults, applications } = useSelector((state) => state.jobs);
-
+    const { jobs, searchResults } = useSelector((state) => state.jobs);
+    const { applications, loading } = useSelector(state => state.applications);
+    
     const { user } = useUser();
     const userId = user?.id;
 
@@ -45,7 +54,7 @@ function SeekerDashboard() {
     const jobsToShow = hasSearched ? searchResults : jobs;
 
     const getStatusColor = (status) => {
-        switch(status?.toLowerCase()) {
+        switch (status?.toLowerCase()) {
             case 'accepted': return 'text-green-600 bg-green-50';
             case 'rejected': return 'text-red-600 bg-red-50';
             case 'reviewed': return 'text-yellow-600 bg-yellow-50';
@@ -54,7 +63,7 @@ function SeekerDashboard() {
     };
 
     const getStatusIcon = (status) => {
-        switch(status?.toLowerCase()) {
+        switch (status?.toLowerCase()) {
             case 'accepted': return <CheckCircle className="w-4 h-4" />;
             case 'rejected': return <XCircle className="w-4 h-4" />;
             case 'reviewed': return <Eye className="w-4 h-4" />;
@@ -69,6 +78,9 @@ function SeekerDashboard() {
                 <h2 className="text-2xl font-bold mb-2">Welcome to JobSphere</h2>
                 <p className="text-blue-100">Find your dream job and take the next step in your career</p>
             </div>
+            
+            <h1 className="text-2xl font-bold mb-4">Create your Profile</h1>
+            <SeekerProfile />
 
             {/* Stats Cards */}
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
@@ -83,7 +95,7 @@ function SeekerDashboard() {
                         </div>
                     </div>
                 </div>
-                
+
                 <div className="bg-white rounded-xl p-4 shadow-sm border border-gray-100">
                     <div className="flex items-center justify-between">
                         <div>
@@ -94,7 +106,7 @@ function SeekerDashboard() {
                             <Send className="w-5 h-5 text-green-600" />
                         </div>
                     </div>
-                    <button 
+                    <button
                         onClick={fetchApplications}
                         className="text-sm text-blue-600 hover:text-blue-700 mt-2 font-medium"
                     >
@@ -115,7 +127,7 @@ function SeekerDashboard() {
                         {hasSearched ? "Search Results" : "Recommended Jobs"}
                     </h2>
                     {hasSearched && jobsToShow.length === 0 && (
-                        <button 
+                        <button
                             onClick={() => setHasSearched(false)}
                             className="text-blue-600 hover:text-blue-700 text-sm"
                         >
@@ -150,7 +162,7 @@ function SeekerDashboard() {
                                         </div>
                                     </div>
                                 </div>
-                                <button 
+                                <button
                                     onClick={() => setSelectedJobId(job._id)}
                                     className="px-5 py-2 bg-gradient-to-r from-blue-600 to-indigo-600 text-white rounded-lg hover:shadow-lg transition-all duration-200 text-sm font-medium"
                                 >
@@ -167,14 +179,14 @@ function SeekerDashboard() {
                 <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-6">
                     <div className="flex items-center justify-between mb-6">
                         <h2 className="text-xl font-bold text-gray-900">My Applications</h2>
-                        <button 
+                        <button
                             onClick={() => setShowApplications(false)}
                             className="text-gray-400 hover:text-gray-600 text-2xl"
                         >
                             ×
                         </button>
                     </div>
-                    
+
                     <div className="space-y-4">
                         {applications.map(app => (
                             <div key={app._id} className="border border-gray-100 rounded-lg p-4">
@@ -192,9 +204,9 @@ function SeekerDashboard() {
                                             </div>
                                         </div>
                                         {app.resumeUrl && (
-                                            <a 
-                                                href={app.resumeUrl} 
-                                                target="_blank" 
+                                            <a
+                                                href={app.resumeUrl}
+                                                target="_blank"
                                                 rel="noopener noreferrer"
                                                 className="inline-flex items-center gap-1 text-sm text-blue-600 hover:text-blue-700 mt-3"
                                             >
@@ -220,7 +232,7 @@ function SeekerDashboard() {
                     <div className="bg-white rounded-2xl max-w-md w-full max-h-[90vh] overflow-y-auto" onClick={(e) => e.stopPropagation()}>
                         <div className="sticky top-0 bg-white border-b border-gray-100 p-4 flex justify-between items-center">
                             <h3 className="font-semibold text-lg">Apply for Position</h3>
-                            <button 
+                            <button
                                 onClick={() => setSelectedJobId(null)}
                                 className="text-gray-400 hover:text-gray-600 text-2xl"
                             >

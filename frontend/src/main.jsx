@@ -13,6 +13,7 @@ import React from "react";
 import ReactDOM from "react-dom/client";
 import App from "./App.jsx";
 import "./index.css";
+import { BrowserRouter } from "react-router-dom";
 
 import { ClerkProvider } from "@clerk/clerk-react";
 
@@ -22,9 +23,11 @@ import { store } from "./app/store";
 const clerkPubKey = import.meta.env.VITE_CLERK_PUBLISHABLE_KEY;
 
 ReactDOM.createRoot(document.getElementById("root")).render(
-  <ClerkProvider publishableKey={clerkPubKey}>
-    <Provider store={store}>
-      <App />
-    </Provider>
-  </ClerkProvider>
+  <BrowserRouter>
+    <ClerkProvider publishableKey={clerkPubKey}>
+      <Provider store={store}>
+        <App />
+      </Provider>
+    </ClerkProvider>
+  </BrowserRouter>
 );

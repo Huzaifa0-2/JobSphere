@@ -99,6 +99,8 @@ app.use("/applications", require("./routes/applicationRoutes"));
 
 app.use("/users", require("./routes/userRoutes"));
 
+app.use("/profile", require("./routes/profileRoutes"));
+
 app.listen(process.env.PORT, () => {
   console.log(`Server running on port ${process.env.PORT}`);
   

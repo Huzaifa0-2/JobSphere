@@ -1,54 +1,44 @@
 import { useState } from "react";
 import { useUser } from "@clerk/clerk-react";
 import { Upload, X, FileText, CheckCircle, Loader2, AlertCircle } from "lucide-react";
+import { useDispatch } from "react-redux";
+import { applyJob } from "../features/applications/applicationSlice";
 
 function ApplyForm({ jobId, onSuccess }) {
     const [file, setFile] = useState(null);
     const [loading, setLoading] = useState(false);
     const [success, setSuccess] = useState(false);
     const [error, setError] = useState(null);
-    
+
+    const dispatch = useDispatch();
+
     const { user } = useUser();
+    
 
-    const handleSubmit = async (e) => {
-        e.preventDefault();
+
+const handleSubmit = async (e) => {
+    e.preventDefault();
+    
+    setLoading(true);
+    setError(null);
+    
+    try {
+        await dispatch(applyJob({
+            jobId,
+            file,
+            userId: user.id
+        })).unwrap();
         
-        if (!file) {
-            setError("Please select a resume file");
-            return;
-        }
-
-        setLoading(true);
-        setError(null);
-        
-        const formData = new FormData();
-        formData.append("resume", file);
-        formData.append("jobId", jobId);
-        formData.append("userId", user.id);
-
-        try {
-            const response = await fetch("http://localhost:5000/applications/apply", {
-                method: "POST",
-                body: formData
-            });
-            
-            if (!response.ok) {
-                const errorData = await response.json();
-                throw new Error(errorData.message || "Application failed");
-            }
-            
-            setSuccess(true);
-            setTimeout(() => {
-                if (onSuccess) onSuccess();
-            }, 1500);
-        } catch (error) {
-            console.log(error);
-            setError(error.message || "Failed to submit application");
-        } finally {
-            setLoading(false);
-        }
-    };
-
+        setSuccess(true);
+        setTimeout(() => {
+            if (onSuccess) onSuccess();
+        }, 1500);
+    } catch (err) {
+        setError("Failed to submit application");
+    } finally {
+        setLoading(false);
+    }
+};
     const handleFileChange = (e) => {
         const selectedFile = e.target.files[0];
         if (selectedFile) {

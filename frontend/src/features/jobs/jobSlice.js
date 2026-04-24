@@ -10,18 +10,6 @@ export const fetchJobs = createAsyncThunk(
   }
 );
 
-// FETCH applications seeker applied to
-export const fetchUserApplications = createAsyncThunk(
-  "applications/fetchUserApplications",
-  async (userId) => {
-    if (!userId) return;
-
-    const res = await fetch(`http://localhost:5000/applications/user/${userId}`);
-    
-    return res.json();
-  }
-);
-
 // GET all jobs (for seeker dashboard)
 export const fetchAllJobs = createAsyncThunk(
   "jobs/fetchAllJobs",
@@ -102,7 +90,6 @@ const jobSlice = createSlice({
   initialState: {
     jobs: [],
     searchResults: [],
-    applications: [],
     loading: false,
     status: "idle"
   },
@@ -114,9 +101,6 @@ const jobSlice = createSlice({
       })
       .addCase(fetchJobs.fulfilled, (state, action) => {
         state.jobs = action.payload;
-      })
-      .addCase(fetchUserApplications.fulfilled, (state, action) => {
-        state.applications = action.payload;
       })
       .addCase(addJob.fulfilled, (state, action) => {
         state.jobs.push(action.payload);
