@@ -382,9 +382,9 @@ function EmployerDashboard() {
                         Reject
                       </button>
 
-<Link to={`/profile/${app.userId}`}>
-    <button>View Profile</button>
-</Link>
+                      <Link to={`/profile/${app.userId}`}>
+                        <button>View Profile</button>
+                      </Link>
                     </div>
                   </div>
                 </div>

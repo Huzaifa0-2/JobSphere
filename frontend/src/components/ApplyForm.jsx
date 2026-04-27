@@ -10,6 +10,7 @@ function ApplyForm({ jobId, onSuccess }) {
     const [success, setSuccess] = useState(false);
     const [error, setError] = useState(null);
 
+    
     const dispatch = useDispatch();
 
     const { user } = useUser();

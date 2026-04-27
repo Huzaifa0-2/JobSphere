@@ -1,16 +1,33 @@
-import { useState } from "react";
-import { useDispatch } from "react-redux";
+import { useState, useEffect } from "react";
+import { useDispatch, useSelector } from "react-redux";
 import { useUser } from "@clerk/clerk-react";
-import { createUpdateSeekerProfile } from "../features/profile/profileSlice";
+import { fetchSeekerProfile, createUpdateSeekerProfile } from "../features/profile/profileSlice";
 
-function SeekerProfile() {
+function ManageSeekerProfile() {
     const [firstName, setFirstName] = useState("");
     const [lastName, setLastName] = useState("");
     const [email, setEmail] = useState("");
     const [phone, setPhone] = useState("");
 
+    const { seekerProfile, loading } = useSelector((state) => state.seekerProfile);
     const dispatch = useDispatch();
     const { user } = useUser();
+
+
+useEffect(() => {
+    if (user) {
+        dispatch(fetchSeekerProfile(user.id));
+    }
+}, [user]);
+
+ useEffect(() => {
+    if (seekerProfile) {
+        setFirstName(seekerProfile.firstName);
+        setLastName(seekerProfile.lastName);
+        setEmail(seekerProfile.email);
+        setPhone(seekerProfile.phone);
+    }
+}, [seekerProfile]);
 
     const handleProfile = (e) => {
         e.preventDefault();
@@ -20,7 +37,8 @@ function SeekerProfile() {
                 firstName,
                 lastName,
                 email,
-                phone
+                phone,
+                imageUrl: user.imageUrl
             }
         }));
     }
@@ -80,7 +98,7 @@ function SeekerProfile() {
                     type="submit"
                     className="w-full py-3 bg-gradient-to-r from-indigo-600 to-purple-600 text-white rounded-lg hover:shadow-lg transition-all duration-200 font-medium"
                 >
-                    Save
+                    Save Changes
                 </button>
 
             </form>
@@ -88,4 +106,4 @@ function SeekerProfile() {
     )
 }
 
-export default SeekerProfile
+export default ManageSeekerProfile

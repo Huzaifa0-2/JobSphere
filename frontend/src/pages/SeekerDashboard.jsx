@@ -3,7 +3,6 @@ import { useUser } from "@clerk/clerk-react";
 import { useSelector, useDispatch } from "react-redux";
 import ApplyForm from "../components/ApplyForm";
 import SearchFilter from "../components/SearchFilter";
-import SeekerProfile from "../components/ManageSeekerProfile";
 
 import {
     fetchAllJobs,
@@ -78,9 +77,6 @@ function SeekerDashboard() {
                 <h2 className="text-2xl font-bold mb-2">Welcome to JobSphere</h2>
                 <p className="text-blue-100">Find your dream job and take the next step in your career</p>
             </div>
-            
-            <h1 className="text-2xl font-bold mb-4">Create your Profile</h1>
-            <SeekerProfile />
 
             {/* Stats Cards */}
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">

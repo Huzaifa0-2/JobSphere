@@ -21,6 +21,10 @@ const profileSchema = new mongoose.Schema({
         type: String,
         required: true
     },
+    imageUrl: {
+        type: String,
+        default: ""
+    }
 })
 
 module.exports = mongoose.model("Profile", profileSchema);
