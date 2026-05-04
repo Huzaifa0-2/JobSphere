@@ -42,6 +42,12 @@ function EmployerDashboard() {
   const [title, setTitle] = useState("");
   const [salary, setSalary] = useState("");
   const [location, setLocation] = useState("");
+  const [company, setCompany] = useState("");
+  const [description, setDescription] = useState("");
+  const [requirements, setRequirements] = useState("");
+  const [jobType, setJobType] = useState("Full-time");
+  const [experience, setExperience] = useState("1-3 years");
+
   const [editId, setEditId] = useState(null);
   const [showForm, setShowForm] = useState(false);
 
@@ -58,7 +64,7 @@ function EmployerDashboard() {
   const handleSubmit = (e) => {
     e.preventDefault();
 
-    if (!title || !salary || !location) {
+    if (!title || !salary || !location || !company || !description || !requirements) {
       alert("Fill all fields");
       return;
     }
@@ -67,7 +73,7 @@ function EmployerDashboard() {
     if (editId) {
       dispatch(updateJob({
         id: editId,
-        job: { title, salary: Number(salary), location },
+        job: { title, salary: Number(salary), location, company, description, requirements, jobType, experience },
         userId: user.id
       }));
     }
@@ -77,6 +83,11 @@ function EmployerDashboard() {
         title,
         salary: Number(salary),
         location,
+        company,
+        description,
+        requirements,
+        jobType,
+        experience,
         postedBy: user.id
       }));
     }
@@ -84,6 +95,11 @@ function EmployerDashboard() {
     setTitle("");
     setSalary("");
     setLocation("");
+    setCompany("");
+    setDescription("");
+    setRequirements("");
+    setJobType("");
+    setExperience("");
     setEditId(null);
     setShowForm(false);
   };
@@ -171,7 +187,7 @@ function EmployerDashboard() {
         </button>
       )}
 
-      {/* 🟢 CREATE / UPDATE JOB FORM */}
+      {/* CREATE / UPDATE JOB FORM */}
       {showForm && (
         <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-6">
           <div className="flex items-center justify-between mb-4">
@@ -185,6 +201,11 @@ function EmployerDashboard() {
                 setTitle("");
                 setSalary("");
                 setLocation("");
+                setCompany("");
+                setDescription("");
+                setRequirements("");
+                setJobType("");
+                setExperience("");
               }}
               className="text-gray-400 hover:text-gray-600"
             >
@@ -224,6 +245,62 @@ function EmployerDashboard() {
                   className="w-full px-4 py-2 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent"
                 />
               </div>
+
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-1">Company</label>
+                <input
+                  value={company}
+                  onChange={(e) => setCompany(e.target.value)}
+                  placeholder="e.g., Google"
+                  className="w-full px-4 py-2 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent"
+                />
+              </div>
+
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-1">Job Description</label>
+                <textarea
+                  value={description}
+                  onChange={(e) => setDescription(e.target.value)}
+                  placeholder="e.g., We are looking for a skilled developer..."
+                  className="w-full px-4 py-2 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent"
+                />
+              </div>
+
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-1">Requirements</label>
+                <textarea
+                  value={requirements}
+                  onChange={(e) => setRequirements(e.target.value)}
+                  placeholder="e.g., Experience..."
+                  className="w-full px-4 py-2 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent"
+                />
+              </div>
+
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-1">Job Type</label>
+                <select
+                  value={jobType}
+                  onChange={(e) => setJobType(e.target.value)}
+                  className="w-full px-4 py-2 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500"
+                >
+                  <option value="Full-time">Full-time</option>
+                  <option value="Part-time">Part-time</option>
+                  <option value="Remote">Remote</option>
+                  <option value="Contract">Contract</option>
+                </select>
+              </div>
+
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-1">Experience</label>
+                <input
+                  type="text"
+                  value={experience}
+                  onChange={(e) => setExperience(e.target.value)}
+                  placeholder="e.g., 2"
+                  className="w-full px-4 py-2 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent"
+                />
+              </div>
+
             </div>
 
             <button
@@ -236,7 +313,7 @@ function EmployerDashboard() {
         </div>
       )}
 
-      {/* 🟢 JOB LIST */}
+      {/* JOB LIST */}
       <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-6">
         <h2 className="text-xl font-bold text-gray-900 mb-6">Your Job Posts</h2>
 
@@ -286,6 +363,11 @@ function EmployerDashboard() {
                       setTitle(job.title);
                       setSalary(job.salary.toString());
                       setLocation(job.location);
+                      setCompany(job.company);
+                      setDescription(job.description);
+                      setRequirements(job.requirements);
+                      setJobType(job.jobType);
+                      setExperience(job.experience);
                       setShowForm(true);
                     }}
                     className="flex items-center gap-1 px-3 py-1.5 bg-yellow-50 text-yellow-600 rounded-lg hover:bg-yellow-100 transition-colors text-sm font-medium"
@@ -316,7 +398,7 @@ function EmployerDashboard() {
             <button
               onClick={() => {
                 setSelectedJobId(null);
-                setApplications([]);
+                // setApplications([]);
               }}
               className="text-gray-400 hover:text-gray-600"
             >
@@ -341,7 +423,7 @@ function EmployerDashboard() {
                         <Users className="w-4 h-4 text-gray-600" />
                       </div>
                       <div>
-                        <p className="font-medium text-gray-900">{app.userName   || app.userId}</p>
+                        <p className="font-medium text-gray-900">{app.userName || app.userId}</p>
                         <p className="text-sm text-gray-500">Applied for: {app.jobId?.title}</p>
                         {/* <p className="text-sm text-gray-500">Applied for: {app.resumeId?.resumeText.slice(0, 105)}...</p> */}
                       </div>

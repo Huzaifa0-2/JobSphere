@@ -8,11 +8,10 @@ import { applyJob } from "../features/applications/applicationSlice";
 
 function JobDetails() {
     const { jobId } = useParams();
-    const dispatch = useDispatch();
     const [applied, setApplied] = useState(false);
+    const dispatch = useDispatch();
     const { user } = useUser();
     const userId = user?.id;
-
 
     // Fetch Single job details
     const { selectedJob, loading } = useSelector(state => state.jobs);
@@ -68,22 +67,62 @@ function JobDetails() {
     if (!selectedJob) return <p>Job not found</p>;
 
     return (
-        <div className="p-6">
-            <h1 className="text-2xl font-bold">{selectedJob.title}</h1>
-            <p>Salary: {selectedJob.salary}</p>
-            <p>Location: {selectedJob.location}</p>
+        <div className="max-w-6xl mx-auto p-6 grid grid-cols-3 gap-6">
 
-            <button
-                onClick={apply}
-                disabled={applied}
-                className={`px-4 py-2 mt-4 ${applied ? "px-5 py-2 bg-gradient-to-r from-blue-400 to-indigo-400 text-white rounded-lg hover:shadow-lg transition-all duration-200 text-sm font-medium"
-                    : "px-5 py-2 bg-gradient-to-r from-blue-600 to-indigo-600 text-white rounded-lg hover:shadow-lg transition-all duration-200 text-sm font-medium"
-                    }`}
-            >
-                {applied ? "Already Applied" : "Apply Now"}
-            </button>
+            {/* LEFT SIDE */}
+            <div className="col-span-2 space-y-6">
+
+                <div className="bg-white p-6 rounded-xl shadow">
+                    <h1 className="text-3xl font-bold">{selectedJob.title}</h1>
+                    <p className="text-gray-600">Company: {selectedJob.company}</p>
+                    <p className="text-gray-500">Location: {selectedJob.location}</p>
+                    <p className="text-gray-500"><span className="mt-2 font-semibold text-green-600">${selectedJob.salary}</span>/year</p>
+                </div>
+
+                <div className="bg-white p-6 rounded-xl shadow">
+                    <h2 className="text-xl font-semibold mb-2">Job Description</h2>
+                    <p className="text-gray-700 whitespace-pre-line">
+                        {selectedJob.description}
+                    </p>
+                </div>
+
+                <div className="bg-white p-6 rounded-xl shadow">
+                    <h2 className="text-xl font-semibold mb-2">Requirements</h2>
+                    <p className="text-gray-700 whitespace-pre-line">
+                        {selectedJob.requirements}
+                    </p>
+                </div>
+
+            </div>
+
+            {/* RIGHT SIDE */}
+            <div className="space-y-4">
+
+                <div className="bg-white p-6 rounded-xl shadow sticky top-6">
+
+                    <button
+                        onClick={apply}
+                        disabled={applied}
+                        className={`px-4 py-2 mt-4 ${applied ? "px-5 py-2 bg-gradient-to-r from-blue-400 to-indigo-400 text-white rounded-lg hover:shadow-lg transition-all duration-200 text-sm font-medium"
+                            : "px-5 py-2 bg-gradient-to-r from-blue-600 to-indigo-600 text-white rounded-lg hover:shadow-lg transition-all duration-200 text-sm font-medium"
+                            }`}
+                    >
+                        {applied ? "Applied" : "Apply Now"}
+                    </button>
+
+                    <div className="mt-4 text-sm text-gray-600">
+                        <p><strong>Posted:</strong> {new Date(selectedJob.createdAt).toLocaleDateString()}</p>
+                        <p><strong>Type:</strong> {selectedJob.jobType}</p>
+                        <p><strong>Experience:</strong> {selectedJob.experience}</p>
+                    </div>
+
+                </div>
+
+            </div>
+
         </div>
     );
 }
+
 
 export default JobDetails;

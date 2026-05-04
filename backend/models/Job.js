@@ -12,6 +12,31 @@ const jobSchema = new mongoose.Schema({
   location: {
     type: String,
     required: true
+  },  
+  company: {
+    type: String,
+    required: true
+  },
+  description: {
+    type: String,
+    required: true
+  },
+  requirements: {
+    type: String,
+    required: true
+  },
+  // postedAt: {
+  //   type: Date,
+  //   default: Date.now
+  // },
+  jobType: {
+    type: String,
+    enum: ["Full-time", "Part-time", "Remote", "Contract"],
+    default: "Full-time"
+  },
+  experience: {
+    type: String,
+    default: "1-3 years"
   },
   postedBy: {
     type: String,
