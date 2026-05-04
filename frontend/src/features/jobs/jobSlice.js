@@ -10,6 +10,15 @@ export const fetchJobs = createAsyncThunk(
   }
 );
 
+// GET single job by id
+export const fetchSingleJob = createAsyncThunk(
+  "jobs/fetchSingleJob",
+  async (id) => {
+    const res = await fetch(`http://localhost:5000/jobs/${id}`);
+    return await res.json();
+  }
+);
+
 // GET all jobs (for seeker dashboard)
 export const fetchAllJobs = createAsyncThunk(
   "jobs/fetchAllJobs",
@@ -90,6 +99,7 @@ const jobSlice = createSlice({
   initialState: {
     jobs: [],
     searchResults: [],
+    selectedJob: null,
     loading: false,
     status: "idle"
   },
@@ -113,10 +123,21 @@ const jobSlice = createSlice({
           job._id === action.payload._id ? action.payload : job
         );
       })
+      .addCase(fetchSingleJob.pending, (state) => {
+        state.loading = true;
+      })
+      .addCase(fetchSingleJob.fulfilled, (state, action) => {
+        state.loading = false;
+        state.selectedJob = action.payload;
+      })
+      .addCase(fetchSingleJob.rejected, (state) => {
+        state.loading = false;
+        state.error = "Failed to fetch job";
+      })
       .addCase(searchJobs.fulfilled, (state, action) => {
         state.searchResults = action.payload;
       });
-  }
+}
 });
 
 export default jobSlice.reducer;

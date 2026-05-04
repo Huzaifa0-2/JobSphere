@@ -341,8 +341,9 @@ function EmployerDashboard() {
                         <Users className="w-4 h-4 text-gray-600" />
                       </div>
                       <div>
-                        <p className="font-medium text-gray-900">{app.userId?.email || app.userId}</p>
+                        <p className="font-medium text-gray-900">{app.userName   || app.userId}</p>
                         <p className="text-sm text-gray-500">Applied for: {app.jobId?.title}</p>
+                        {/* <p className="text-sm text-gray-500">Applied for: {app.resumeId?.resumeText.slice(0, 105)}...</p> */}
                       </div>
                     </div>
 

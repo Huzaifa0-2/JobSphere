@@ -7,13 +7,20 @@ const {
   getApplicationsByJob,
   updateApplicationStatus,
   getApplicationsByUser,
+  checkApplication,
 } = require("../controllers/applicationController");
 
 
 router.get("/job/:jobId", getApplicationsByJob);
 router.put("/:id", updateApplicationStatus);
-router.post("/apply", upload.single("resume"), applyJob);
+// router.post("/apply", upload.single("resume"), applyJob);
 
 router.get("/user/:userId", getApplicationsByUser);
+
+
+
+router.post("/apply", applyJob);
+
+router.get("/check", checkApplication);
 
 module.exports = router;

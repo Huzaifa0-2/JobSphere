@@ -13,13 +13,45 @@ export const fetchSeekerProfile = createAsyncThunk(
 export const createUpdateSeekerProfile = createAsyncThunk(
     "profile/createUpdateSeekerProfile",
     async ({ userId, profileData }) => {
-        await fetch(`http://localhost:5000/profile/${userId}`, {
+       const res = await fetch(`http://localhost:5000/profile/${userId}`, {
             method: "POST",
             headers: {
                 "Content-Type": "application/json"
             },
             body: JSON.stringify(profileData)
         })
+        if (!res.ok) {
+            throw new Error("Failed to save profile");
+        }
+
+        return res.json();
+    }
+)
+
+// UPLOAD RESUME
+export const uploadResume = createAsyncThunk(
+    "profile/uploadResume",
+    async (formData) => {
+        const res = await fetch("http://localhost:5000/resume/upload", {
+            method: "POST",
+            body: formData
+        });
+        if (!res.ok) {
+            throw new Error("Upload failed");
+        }
+        return res.json();
+    }
+)
+
+// GET USER RESUME
+export const getUserResume = createAsyncThunk(
+    "profile/getUserResume",
+    async (userId) => {
+        const res = await fetch(`http://localhost:5000/resume/${userId}`);
+        if (!res.ok) {
+            throw new Error("Failed to fetch resume");
+        }
+        return res.json();
     }
 )
 
@@ -43,6 +75,7 @@ const profileSlice = createSlice({
     name: "seekerProfile",
     initialState: {
         seekerProfile: null,
+        resume: null,
         loading: false,
         error: null
     },
@@ -74,20 +107,44 @@ const profileSlice = createSlice({
             .addCase(createUpdateSeekerProfile.rejected, (state, action) => {
                 state.loading = false;
                 state.error = action.payload;
-            });
-            // // Update Profile
-            // .addCase(updateSeekerProfile.pending, (state) => {
-            //     state.loading = true;
-            //     state.error = null;
-            // })
-            // .addCase(updateSeekerProfile.fulfilled, (state, action) => {
-            //     state.loading = false;
-            //     state.seekerProfile = action.payload;
-            // })
-            // .addCase(updateSeekerProfile.rejected, (state, action) => {
-            //     state.loading = false;
-            //     state.error = action.payload;
-            // });
+            })
+            .addCase(uploadResume.pending, (state) => {
+                state.loading = true;
+                state.error = null;
+            })
+            .addCase(uploadResume.fulfilled, (state, action) => {
+                state.loading = false;
+                state.resume = action.payload;
+            })
+            .addCase(uploadResume.rejected, (state, action) => {
+                state.loading = false;
+                state.error = action.payload;
+            })
+            .addCase(getUserResume.pending, (state) => {
+                state.loading = true;
+                state.error = null;
+            })
+            .addCase(getUserResume.fulfilled, (state, action) => {
+                state.loading = false;
+                state.resume = action.payload;
+            })
+            .addCase(getUserResume.rejected, (state, action) => {
+                state.loading = false;
+                state.error = action.payload;
+            })
+        // // Update Profile
+        // .addCase(updateSeekerProfile.pending, (state) => {
+        //     state.loading = true;
+        //     state.error = null;
+        // })
+        // .addCase(updateSeekerProfile.fulfilled, (state, action) => {
+        //     state.loading = false;
+        //     state.seekerProfile = action.payload;
+        // })
+        // .addCase(updateSeekerProfile.rejected, (state, action) => {
+        //     state.loading = false;
+        //     state.error = action.payload;
+        // });
     }
 });
 

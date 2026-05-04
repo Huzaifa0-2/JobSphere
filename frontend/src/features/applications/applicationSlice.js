@@ -2,22 +2,38 @@ import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 
 // Apply Job
 export const applyJob = createAsyncThunk(
-  "applications/applyJob",
-  async ({ jobId, file, userId }) => {
-    const formData = new FormData();
-    formData.append("resume", file);
-    formData.append("jobId", jobId);
-    formData.append("userId", userId);
+    "applications/applyJob",
+    async ({ userId, jobId, userName, resumeId, resumeUrl }) => {
+        const res = await fetch("http://localhost:5000/applications/apply", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ userId, jobId, userName, resumeId, resumeUrl })
+        });
+        const data = await res.json();
+        if (!res.ok) {
+            throw new Error(data.message || "Application failed");
+        }
+        return data;  // ← Just return data, don't call setApplied
+    }
+)
 
-    const res = await fetch("http://localhost:5000/applications/apply", {
-      method: "POST",
-      body: formData
-    });
+// export const applyJob = createAsyncThunk(
+//   "applications/applyJob",
+//   async ({ jobId, file, userId }) => {
+//     const formData = new FormData();
+//     formData.append("resume", file);
+//     formData.append("jobId", jobId);
+//     formData.append("userId", userId);
 
-    const data = await res.json();
-    return data;
-  }
-);
+//     const res = await fetch("http://localhost:5000/applications/apply", {
+//       method: "POST",
+//       body: formData
+//     });
+
+//     const data = await res.json();
+//     return data;
+//   }
+// );
 
 // FETCH applications seeker applied to
 export const fetchUserApplications = createAsyncThunk(

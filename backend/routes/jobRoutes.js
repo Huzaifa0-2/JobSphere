@@ -8,6 +8,7 @@ const {
   updateJob,
   getEmployerJobs,
   searchJobs,
+  getJobById,
 } = require("../controllers/jobController");
 
 router.get("/", getAllJobs);
@@ -18,5 +19,7 @@ router.put("/:id", updateJob);
 router.get("/employer/:userId", getEmployerJobs);
 
 router.get("/search", searchJobs);
+
+router.get("/:id", getJobById);
 
 module.exports = router;

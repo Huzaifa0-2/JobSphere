@@ -24,11 +24,21 @@ exports.createJob = async (req, res) => {
     res.status(500).json({ message: "Error creating job" });
   }
 };
-// DELETE job
-// exports.deleteJob = async (req, res) => {
-//   await Job.findByIdAndDelete(req.params.id);
-//   res.json({ message: "Deleted" });
-// };
+
+// GET Single Job by id
+exports.getJobById = async (req, res) => {
+  try {
+    const job = await Job.findById(req.params.id);
+
+    if (!job) {
+      return res.status(404).json({ message: "Job not found" });
+    }
+
+    res.json(job);
+  } catch (error) {
+    res.status(500).json({ message: "Error fetching job" });
+  }
+};
 
 // DELETE job with security check
 exports.deleteJob = async (req, res) => {

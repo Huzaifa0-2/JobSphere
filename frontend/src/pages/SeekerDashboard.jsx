@@ -3,6 +3,8 @@ import { useUser } from "@clerk/clerk-react";
 import { useSelector, useDispatch } from "react-redux";
 import ApplyForm from "../components/ApplyForm";
 import SearchFilter from "../components/SearchFilter";
+import { useNavigate } from "react-router-dom";
+
 
 import {
     fetchAllJobs,
@@ -25,8 +27,10 @@ import {
     XCircle,
     Eye
 } from "lucide-react";
+import { fetchSeekerProfile, uploadResume } from "../features/profile/profileSlice";
 
 function SeekerDashboard() {
+    const navigate = useNavigate();
     const [selectedJobId, setSelectedJobId] = useState(null);
     const [hasSearched, setHasSearched] = useState(false);
     const [showApplications, setShowApplications] = useState(false);
@@ -34,9 +38,27 @@ function SeekerDashboard() {
     const dispatch = useDispatch();
     const { jobs, searchResults } = useSelector((state) => state.jobs);
     const { applications, loading } = useSelector(state => state.applications);
-    
+
     const { user } = useUser();
     const userId = user?.id;
+
+    const [resume, setResume] = useState(null);
+
+    const addResume = async () => {
+        if (!resume) {
+            alert("Select a file first");
+            return;
+        }
+        const formData = new FormData();
+        formData.append("resume", resume);
+        formData.append("userId", user.id);
+        try {
+            await dispatch(uploadResume(formData)).unwrap();
+            alert("Resume uploaded successfully!");
+        } catch (error) {
+            alert("Upload failed");
+        }
+    };
 
     // Fetch applications for the seeker he applied to
     const fetchApplications = async () => {
@@ -109,6 +131,27 @@ function SeekerDashboard() {
                         View Applications →
                     </button>
                 </div>
+                <div className="bg-white rounded-xl p-4 shadow-sm border border-gray-100">
+                    <div className="flex items-center justify-between">
+                        <div>
+                            <p className="text-gray-500 text-sm">Upload Resume</p>
+                        </div>
+                        <div className="w-10 h-10 bg-green-50 rounded-lg flex items-center justify-center">
+                            <FileText className="w-5 h-5 text-green-600" />
+                        </div>
+                    </div>
+                    <input
+                        type="file"
+                        onChange={(e) => setResume(e.target.files[0])}
+                    />
+                    <button
+                        onClick={addResume}
+                        className="px-5 py-2 bg-gradient-to-r from-blue-600 to-indigo-600 text-white rounded-lg hover:shadow-lg transition-all duration-200 text-sm font-medium"
+                    >
+                        Upload →
+                    </button>
+
+                </div>
             </div>
 
             {/* Search Section */}
@@ -158,12 +201,23 @@ function SeekerDashboard() {
                                         </div>
                                     </div>
                                 </div>
-                                <button
+                                {/* <button
                                     onClick={() => setSelectedJobId(job._id)}
                                     className="px-5 py-2 bg-gradient-to-r from-blue-600 to-indigo-600 text-white rounded-lg hover:shadow-lg transition-all duration-200 text-sm font-medium"
                                 >
                                     Apply Now
-                                </button>
+                                </button> */}
+                                {/* <button onClick={() => applyJob(job._id)}>
+                                    Apply
+                                </button> */}
+                                <div onClick={() => navigate(`/job/${job._id}`)}
+                                    className="px-3 py-1 bg-green-50 text-green-600 rounded-full text-sm font-medium hover:bg-green-100 transition-colors"
+                                >
+                                    <div className="flex items-center gap-1 py-2">
+                                        <Eye className="w-5 h-5 text-green-600 hover:text-green-700" />
+                                        View Details
+                                    </div>
+                                </div>
                             </div>
                         </div>
                     ))}

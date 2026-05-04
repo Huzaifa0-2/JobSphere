@@ -28,8 +28,9 @@ exports.getApplicationsByJob = async (req, res) => {
         const { jobId } = req.params;
 
         // const applications = await Application.find({ jobId });
-        const applications = await Application.find({ jobId }).populate("jobId"); // Take ref from model and add all data of job from jobId
-
+        const applications = await Application.find({ jobId })
+        .populate("jobId") // Take ref from model and add all data of job through jobId
+        .populate("resumeId"); // Take ref from model and add all data of resume through resumeId
         res.json(applications);
 
     } catch (error) {
@@ -58,51 +59,68 @@ exports.updateApplicationStatus = async (req, res) => {
 };
 
 // APPLY JOB
+
 exports.applyJob = async (req, res) => {
-    try {
-        const { jobId, userId } = req.body;
+  try {
+    const { userId, jobId, userName, resumeId, resumeUrl } = req.body;
 
-        // Prevent duplicate apply
-        const existing = await Application.findOne({ userId, jobId });
-        if (existing) {
-            return res.status(400).json({ message: "Already applied" });
-        }
+    // CRITICAL CHECK (REAL WORLD SECURITY)
+    const existing = await Application.findOne({ userId, jobId });
 
-        // file from multer
-        const file = req.file;
-
-        if (!file) {
-            return res.status(400).json({ message: "No file uploaded" });
-        }
-
-        // Upload to Cloudinary
-        const uploadStream = cloudinary.uploader.upload_stream(
-            { resource_type: "raw" },
-            async (error, result) => {
-                if (error) return res.status(500).json(error);
-
-                const resumeUrl = result.secure_url;
-
-                // Extract text
-                const data = await pdfParse(file.buffer);
-                const resumeText = data.text;
-
-                // Save in DB
-                const application = await Application.create({
-                    userId: req.body.userId,
-                    jobId: new mongoose.Types.ObjectId(req.body.jobId),
-                    resumeUrl,
-                    resumeText
-                });
-
-                res.json(application);
-            }
-        );
-
-        streamifier.createReadStream(file.buffer).pipe(uploadStream);
-
-    } catch (error) {
-        console.log(error);
-        res.status(500).json({ message: "Error applying job" });
+    if (existing) {
+      return res.status(400).json({
+        message: "You already applied to this job"
+      });
     }
+
+    const application = await Application.create({
+      userId,
+      jobId,
+      userName,
+      resumeId,
+      resumeUrl
+    });
+
+    res.json(application);
+
+  } catch (error) {
+    res.status(500).json({ message: "Error applying job" });
+  }
+};
+
+// exports.applyJob = async (req, res) => {
+//   try {
+//     const { userId, userName, jobId, resumeId, resumeUrl } = req.body;
+
+//     if (!resumeId) {
+//       return res.status(400).json({ message: "Upload resume first" });
+//     }
+
+//     const application = await Application.create({
+//       userId,
+//       userName,
+//       jobId,
+//       resumeId,
+//       resumeUrl
+//     });
+
+//     res.json(application);
+
+//   } catch (error) {
+//     res.status(500).json({ message: "Error applying job" });
+//   }
+// };
+
+// CHECK if user has already applied for a job
+exports.checkApplication = async (req, res) => {
+  try {
+    const { userId, jobId } = req.query;
+
+    const exists = await Application.findOne({ userId, jobId });
+
+    res.json({ applied: !!exists });
+
+  } catch (error) {
+    res.status(500).json({ message: "Error checking application" });
+  }
 };

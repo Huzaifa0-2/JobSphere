@@ -12,6 +12,7 @@ import SeekerProfile from "./pages/SeekerProfile";
 import Layout from "./components/Layout";
 import { Routes, Route } from "react-router-dom";
 import ManageSeekerProfile from "./components/ManageSeekerProfile";
+import JobDetails from "./pages/JobDetails";
 
 function App() {
   const { user } = useUser();
@@ -51,6 +52,13 @@ function App() {
         <Route path="/profile/:userId" element={
           <Layout>
             <SeekerProfile />
+          </Layout>
+        } />
+
+        {/* Job details */}
+        <Route path="/job/:jobId" element={
+          <Layout>
+            <JobDetails />
           </Layout>
         } />
 
