@@ -59,7 +59,7 @@ function JobDetails() {
             resumeUrl: resume.resumeUrl
         }));
         if (result) {
-            setApplied(true);  // ← Set applied here instead
+            setApplied(true);
         }
     };
 
