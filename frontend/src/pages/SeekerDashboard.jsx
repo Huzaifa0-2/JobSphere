@@ -25,6 +25,7 @@ import {
     DollarSign,
     Send,
     FileText,
+    MessageCircleMore,
     Clock,
     CheckCircle,
     XCircle,
@@ -180,12 +181,12 @@ function SeekerDashboard() {
             </div>
 
             {/* AI Suggestion Button */}
-            <div className="flex justify-center mt-6">
+            <div className="my-8 grid grid-cols-1 md:grid-cols-2 justify-items-center">
                 <button
                     onClick={getAISuggestions}
                     disabled={loadingAI}
                     className={`
-            px-8 py-4 rounded-xl font-semibold text-white transition-all duration-300 
+            flex items-center justify-center max-w-72 w-full md:w-62 my-4 md:my-0 px-8 py-4 rounded-xl font-semibold text-white transition-all duration-300 
             flex items-center gap-3 shadow-lg hover:shadow-xl transform hover:scale-105
             ${loadingAI ?
                             'bg-gray-400 cursor-not-allowed'
@@ -193,7 +194,17 @@ function SeekerDashboard() {
                     <Sparkles className="w-5 h-5" />
                     Match Jobs with AI
                 </button>
+                <div onClick={() => navigate(`/AIChat`)}
+                    className="flex items-center justify-center max-w-72 w-full md:w-52 my-4 md:my-0 px-8 py-4 rounded-xl font-semibold text-white transition-all duration-300 
+            flex items-center gap-3 shadow-lg hover:shadow-xl transform hover:scale-105 bg-gradient-to-r from-purple-600 to-indigo-600 hover:from-purple-700 hover:to-indigo-700"
+                >
+                    {/* <div className="flex items-center gap-1 py-2"> */}
+                    <MessageCircleMore className="w-5 h-5" />
+                    Chat with AI
+                    {/* </div> */}
+                </div>
             </div>
+
 
             {showPopup && (
                 <div className="fixed inset-0 z-50 bg-black/50 backdrop-blur-sm flex items-center justify-center p-4">

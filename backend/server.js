@@ -106,7 +106,7 @@ app.use("/profile", require("./routes/profileRoutes"));
 app.use("/resume", require("./routes/resumeRoutes"));
 
 
-// AI
+// Gemini AI
 app.use("/ai", require("./routes/aiRoutes"));
 
 

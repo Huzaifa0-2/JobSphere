@@ -32,6 +32,11 @@ import {
 } from "lucide-react";
 
 function EmployerDashboard() {
+
+  // Gemini AI
+  const [aiAnalysis, setAiAnalysis] = useState(null);
+  const [loadingAI, setLoadingAI] = useState(false);
+
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const { jobs } = useSelector(state => state.jobs);
@@ -137,6 +142,35 @@ function EmployerDashboard() {
       case 'rejected': return <XCircle className="w-4 h-4" />;
       default: return <Clock className="w-4 h-4" />;
     }
+  };
+
+  // Gemini AI Analysis for a candidate
+  const analyzeCandidate = async (applicationId) => {
+
+    setLoadingAI(true);
+
+    const res = await fetch(
+      "http://localhost:5000/ai/analyze-candidate",
+      {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify({
+          applicationId
+        })
+      }
+    );
+
+    const data = await res.json();
+
+    setAiAnalysis(data.analysis);
+    // setAiAnalysis(prev => ({
+    //   ...prev,
+    //   [applicationId]: data.analysis
+    // }));
+
+    setLoadingAI(false);
   };
 
   return (
@@ -469,6 +503,50 @@ function EmployerDashboard() {
                         <button>View Profile</button>
                       </Link>
                     </div>
+
+                    <button
+                      onClick={() => analyzeCandidate(app._id)}
+                      className="bg-purple-600 text-white px-3 py-2 rounded mt-2"
+                    >
+                      Analyze Candidate
+                    </button>
+
+                    {aiAnalysis && (
+                      <div className="bg-gray-100 p-3 mt-3 rounded">
+
+                        <p>
+                          Match Score:
+                          {aiAnalysis.matchScore}%
+                        </p>
+
+                        <p>
+                          Recommendation:
+                          {aiAnalysis.recommendation}
+                        </p>
+
+                        <div>
+                          <strong>Strengths:</strong>
+
+                          <ul>
+                            {aiAnalysis.strengths.map((s, i) => (
+                              <li key={i}>{s}</li>
+                            ))}
+                          </ul>
+                        </div>
+
+                        <div>
+                          <strong>Missing Skills:</strong>
+
+                          <ul>
+                            {aiAnalysis.missingSkills.map((s, i) => (
+                              <li key={i}>{s}</li>
+                            ))}
+                          </ul>
+                        </div>
+
+                      </div>
+                    )}
+
                   </div>
                 </div>
               </div>

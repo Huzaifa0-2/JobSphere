@@ -1,6 +1,9 @@
 const axios = require("axios");
 const Resume = require("../models/Resume");
 const Job = require("../models/Job");
+const Chat = require("../models/Chat");
+const Application = require("../models/Applications");
+
 
 // Helper function to call Gemini API
 const callGemini = async (model, prompt) => {
@@ -140,6 +143,187 @@ IMPORTANT:
             success: false,
             message: "Failed to match jobs",
             error: error.message
+        });
+    }
+};
+
+exports.chatWithAI = async (req, res) => {
+    try {
+        const { userId, message } = req.body;
+
+        // 1. Get resume
+        const resume = await Resume.findOne({ userId });
+
+        if (!resume) {
+            return res.status(400).json({
+                message: "Upload resume first"
+            });
+        }
+
+        // 2. Find old chat
+        let chat = await Chat.findOne({ userId });
+
+        // 3. Create if not exists
+        if (!chat) {
+            chat = await Chat.create({
+                userId,
+                messages: []
+            });
+        }
+
+        // 4. Build history
+        const historyText = chat.messages
+            .map(msg => `${msg.role}: ${msg.content}`)
+            .join("\n");
+
+        // 5. Add user message
+        chat.messages.push({
+            role: "user",
+            content: message
+        });
+
+        // 6. Build prompt
+        const prompt = `
+You are a career assistant AI.
+
+USER RESUME:
+${resume.resumeText}
+
+CHAT HISTORY:
+${historyText}
+
+CURRENT USER QUESTION:
+${message}
+
+Answer professionally and clearly.
+`;
+
+        // 7. Call Gemini
+        let aiReply;
+        try {
+            aiReply = await callGemini("gemini-3-flash-preview", prompt);
+            console.log("Using Gemini 3 Flash Preview");
+        } catch (err) {
+            console.log("Primary failed:", err.message);
+            console.log("Switching to fallback model...");
+            // Fallback to more stable model
+            aiReply = await callGemini("gemini-3.1-flash-lite-preview", prompt);
+            console.log("Using Gemini 3.1 Flash Lite Preview");
+        }
+
+        // 8. Save assistant reply
+        chat.messages.push({
+            role: "assistant",
+            content: aiReply
+        });
+
+        // 9. Save chat
+        await chat.save();
+
+        // 10. Send response
+        res.json({
+            success: true,
+            reply: aiReply,
+            messages: chat.messages
+        });
+
+    } catch (error) {
+        console.log(error);
+
+        res.status(500).json({
+            message: "AI chat failed"
+        });
+    }
+};
+
+// ANALYZE CANDIDATE
+exports.analyzeCandidate = async (req, res) => {
+    try {
+
+        const { applicationId } = req.body;
+
+        // Get application + job + resume
+        const application = await Application.findById(applicationId)
+            .populate("jobId")
+            .populate("resumeId");
+
+        if (!application) {
+            return res.status(404).json({
+                message: "Application not found"
+            });
+        }
+
+        const job = application.jobId;
+        const resume = application.resumeId;
+
+        // Build AI prompt
+        const prompt = `
+You are an expert AI hiring assistant.
+
+JOB DETAILS:
+Title: ${job.title}
+Description: ${job.description || ""}
+Requirements: ${job.requirements || ""}
+Location: ${job.location}
+
+APPLICANT RESUME:
+${resume.resumeText}
+
+TASK:
+Analyze how suitable this applicant is for the job.
+
+RETURN JSON ONLY:
+
+{
+  "matchScore": 0,
+  "strengths": [],
+  "missingSkills": [],
+  "recommendation": ""
+}
+
+RULES:
+- matchScore should be number between 0-100
+- strengths should be concise
+- missingSkills should be concise
+- recommendation should be professional
+- RETURN ONLY JSON
+`;
+
+        // AI response
+        let aiText;
+
+        try {
+            // Try primary model first (faster, cheaper)
+            aiText = await callGemini("gemini-3-flash-preview", prompt);
+            console.log("Using Gemini 3 Flash Preview");
+        } catch (err) {
+            console.log("Primary failed:", err.message);
+            console.log("Switching to fallback model...");
+            // Fallback to more stable model
+            aiText = await callGemini("gemini-3.1-flash-lite-preview", prompt);
+            console.log("Using Gemini 3.1 Flash Lite Preview");
+        }
+
+        // Clean markdown if Gemini wraps JSON
+        const cleaned = aiText
+            .replace(/```json/g, "")
+            .replace(/```/g, "")
+            .trim();
+
+        const parsed = JSON.parse(cleaned);
+
+        res.json({
+            success: true,
+            analysis: parsed
+        });
+
+    } catch (error) {
+
+        console.log(error);
+
+        res.status(500).json({
+            success: false,
+            message: "AI analysis failed"
         });
     }
 };

@@ -13,6 +13,7 @@ import Layout from "./components/Layout";
 import { Routes, Route } from "react-router-dom";
 import ManageSeekerProfile from "./components/ManageSeekerProfile";
 import JobDetails from "./pages/JobDetails";
+import AIChat from "./pages/AIChat";
 
 function App() {
   const { user } = useUser();
@@ -59,6 +60,13 @@ function App() {
         <Route path="/job/:jobId" element={
           <Layout>
             <JobDetails />
+          </Layout>
+        } />
+
+        {/* AI Chat */}
+        <Route path="/AIChat" element={
+          <Layout>
+            <AIChat />
           </Layout>
         } />
 
