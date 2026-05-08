@@ -144,7 +144,7 @@ function SeekerDashboard() {
         fetch(`http://localhost:5000/applications/user/${user.id}`)
             .then(res => res.json())
             .then(data => {
-                const ids = data.map(app => app.jobId);
+                const ids = data.map(app => app.jobId._id);
                 setAppliedJobs(ids);
             });
     }, []);
@@ -166,7 +166,7 @@ function SeekerDashboard() {
             resumeUrl: resume.resumeUrl
         }));
         if (result) {
-            setAppliedJobs([...appliedJobs, jobId]); 
+            setAppliedJobs([...appliedJobs, jobId]);
         }
     };
 
@@ -346,12 +346,14 @@ function SeekerDashboard() {
                                                     <button
                                                         disabled={appliedJobs.includes(match.jobId)}
                                                         onClick={() => apply(match.jobId)}
-                                                        className={`px-3 py-1 mt-3 rounded ${appliedJobs.includes(match.jobId)
-                                                                ? "bg-gray-400"
-                                                                : "bg-blue-600 text-white hover:bg-blue-700"
+                                                        className={`mt-2 px-2 md:px-4 py-2.5 ${appliedJobs.includes(match.jobId) ? "bg-gradient-to-r from-blue-400 to-indigo-400 text-white rounded-lg hover:shadow-lg transition-all duration-200 text-sm font-medium"
+                                                            : "bg-gradient-to-r from-blue-600 to-indigo-600 text-white rounded-lg hover:shadow-lg transition-all duration-200 text-sm font-medium"
                                                             }`}
                                                     >
-                                                        {appliedJobs.includes(match.jobId) ? "Applied" : "Apply"}
+                                                        <div className="flex items-center gap-1 py-2">
+                                                            <Send className="w-4 h-4" />
+                                                            {appliedJobs.includes(match.jobId) ? "Applied" : "Apply Now"}
+                                                        </div>
                                                     </button>
                                                 </div>
                                             </div>
