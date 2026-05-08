@@ -60,11 +60,11 @@ export const fetchJobApplications = createAsyncThunk(
 // UPDATE STATUS (ACCEPT / REJECT)
 export const updateApplicationStatus = createAsyncThunk(
   "applications/updateStatus",
-  async ({ id, status }) => {
+  async ({ id, jobTitle, status }) => {
     const res = await fetch(`http://localhost:5000/applications/${id}`, {
       method: "PUT",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ status })
+      body: JSON.stringify({ jobTitle, status })
     });
 
     const data = await res.json();

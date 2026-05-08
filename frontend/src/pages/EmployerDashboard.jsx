@@ -124,8 +124,8 @@ function EmployerDashboard() {
   };
 
   // Accept / Reject
-  const updateStatus = async (id, status) => {
-    dispatch(updateApplicationStatus({ id, status }));
+  const updateStatus = async (id, jobTitle, status) => {
+    dispatch(updateApplicationStatus({ id, jobTitle, status }));
   };
 
   const getStatusColor = (status) => {
@@ -484,7 +484,7 @@ function EmployerDashboard() {
 
                     <div className="flex gap-2">
                       <button
-                        onClick={() => updateStatus(app._id, "accepted")}
+                        onClick={() => updateStatus(app._id, app.jobId.title, "accepted")}
                         className="flex items-center gap-1 px-3 py-1.5 bg-green-50 text-green-600 rounded-lg hover:bg-green-100 transition-colors text-sm font-medium"
                       >
                         <CheckCircle className="w-4 h-4" />
@@ -492,7 +492,7 @@ function EmployerDashboard() {
                       </button>
 
                       <button
-                        onClick={() => updateStatus(app._id, "rejected")}
+                        onClick={() => updateStatus(app._id, app.jobId.title, "rejected")}
                         className="flex items-center gap-1 px-3 py-1.5 bg-red-50 text-red-600 rounded-lg hover:bg-red-100 transition-colors text-sm font-medium"
                       >
                         <XCircle className="w-4 h-4" />

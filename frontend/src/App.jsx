@@ -14,6 +14,8 @@ import { Routes, Route } from "react-router-dom";
 import ManageSeekerProfile from "./components/ManageSeekerProfile";
 import JobDetails from "./pages/JobDetails";
 import AIChat from "./pages/AIChat";
+import Notifications from "./components/Notifications";
+
 
 function App() {
   const { user } = useUser();
@@ -67,6 +69,13 @@ function App() {
         <Route path="/AIChat" element={
           <Layout>
             <AIChat />
+          </Layout>
+        } />
+
+        {/* Notifications */}
+        <Route path="/Notifications" element={
+          <Layout>
+            <Notifications />
           </Layout>
         } />
 

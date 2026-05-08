@@ -2,60 +2,70 @@ const mongoose = require("mongoose");
 const Application = require("../models/Applications");
 const cloudinary = require("../config/cloudinary");
 const streamifier = require("streamifier");
-// const pdfParse = require("pdf-parse");
 const pdfParse = require("pdf-parse/lib/pdf-parse");
+const Notification = require("../models/Notification");
 
 
 // GET applications by user (seeker)
 exports.getApplicationsByUser = async (req, res) => {
-    try {
-        const { userId } = req.params;
+  try {
+    const { userId } = req.params;
 
-        // const applications = await Application.find({ userId });
-        const applications = await Application.find({ userId }).populate("jobId");
+    // const applications = await Application.find({ userId });
+    const applications = await Application.find({ userId }).populate("jobId");
 
-        res.json(applications);
+    res.json(applications);
 
-    } catch (error) {
-        res.status(500).json({ message: "Error fetching user applications" });
-    }
+  } catch (error) {
+    res.status(500).json({ message: "Error fetching user applications" });
+  }
 };
 
 
 // GET applications for a job (employer)
 exports.getApplicationsByJob = async (req, res) => {
-    try {
-        const { jobId } = req.params;
+  try {
+    const { jobId } = req.params;
 
-        // const applications = await Application.find({ jobId });
-        const applications = await Application.find({ jobId })
-        .populate("jobId") // Take ref from model and add all data of job through jobId
-        .populate("resumeId"); // Take ref from model and add all data of resume through resumeId
-        res.json(applications);
+    // const applications = await Application.find({ jobId });
+    const applications = await Application.find({ jobId })
+      .populate("jobId") // Take ref from model and add all data of job through jobId
+      .populate("resumeId"); // Take ref from model and add all data of resume through resumeId
+    res.json(applications);
 
-    } catch (error) {
-        res.status(500).json({ message: "Error fetching applications" });
-    }
+  } catch (error) {
+    res.status(500).json({ message: "Error fetching applications" });
+  }
 };
 
 
 // UPDATE status
 exports.updateApplicationStatus = async (req, res) => {
-    try {
-        const { id } = req.params;
-        const { status } = req.body;
+  try {
+    const { id } = req.params;
+    const { jobTitle, status } = req.body;
 
-        const updated = await Application.findByIdAndUpdate(
-            id,
-            { status },
-            { new: true }
-        );
+    const updated = await Application.findByIdAndUpdate(
+      id,
+      { status },
+      { new: true }
+    );
 
-        res.json(updated);
+    res.json(updated);
 
-    } catch (error) {
-        res.status(500).json({ message: "Error updating status" });
-    }
+    // Create notification for seeker
+    await Notification.create({
+      userId: updated.userId,
+
+      title: jobTitle,
+
+      message:
+        `Your application status was updated to ${status}`
+    });
+
+  } catch (error) {
+    res.status(500).json({ message: "Error updating status" });
+  }
 };
 
 // APPLY JOB

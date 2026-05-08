@@ -1,9 +1,29 @@
 import { SignOutButton, useUser } from "@clerk/clerk-react";
+import { useEffect, useState } from "react";
 import { Briefcase, LogOut } from "lucide-react";
 import { Link } from "react-router-dom";
+import { Bell } from "lucide-react";
 
 function Layout({ children, role }) {
     const { user } = useUser();
+
+    const [notifications, setNotifications] = useState([]);
+
+    // Fetch notifications
+    useEffect(() => {
+
+        if (!user) return;
+
+        fetch(
+            `http://localhost:5000/notifications/${user.id}`
+        )
+            .then(res => res.json())
+            .then(data => setNotifications(data));
+
+    }, [user]);
+
+    const unreadCount = notifications.filter(n => !n.isRead).length;
+
 
     return (
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
@@ -30,11 +50,23 @@ function Layout({ children, role }) {
                         )}
 
                         {role === "seeker" && (
-                            <Link to="/ManageSeekerProfile">
-                                <button className="px-3 py-1 bg-green-50 text-green-600 rounded-full text-sm font-medium hover:bg-green-100 transition-colors">
-                                    Manage Profile
-                                </button>
-                            </Link>
+                            <div className="flex items-center gap-3">
+                                <Link to="/ManageSeekerProfile">
+                                    <button className="px-3 py-1 bg-green-50 text-green-600 rounded-full text-sm font-medium hover:bg-green-100 transition-colors">
+                                        Manage Profile
+                                    </button>
+                                </Link>
+                                <Link to="/Notifications">
+                                    <div className="relative">
+                                        <Bell className="w-6 h-6 text-indigo-500" />
+                                        {unreadCount > 0 && (
+                                            <span className="absolute -top-2 -right-2 bg-red-500 text-white text-xs rounded-full w-5 h-5 flex items-center justify-center">
+                                                {unreadCount}
+                                            </span>
+                                        )}
+                                    </div>
+                                </Link>
+                            </div>
                         )}
                         <SignOutButton>
                             <button className="flex items-center gap-2 px-4 py-2 text-gray-600 hover:text-red-600 hover:bg-red-50 rounded-xl transition-all duration-200">
