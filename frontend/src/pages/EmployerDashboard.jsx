@@ -176,11 +176,41 @@ function EmployerDashboard() {
   return (
     <div className="space-y-6">
       {/* Welcome Banner */}
-      <div className="bg-gradient-to-r from-indigo-600 to-purple-600 rounded-2xl p-6 text-white">
-        <h2 className="text-2xl font-bold mb-2">Employer Dashboard</h2>
-        <p className="text-indigo-100">Post jobs, find top talent, and grow your team</p>
-      </div>
+      <div className="relative overflow-hidden bg-gradient-to-r from-slate-700 to-slate-800 rounded-2xl p-6 text-white shadow-xl">
 
+        {/* Content */}
+        <div className="relative z-10">
+          <div className="flex items-center gap-3 mb-3">
+            <div className="hidden min-[375px]:flex h-10 w-13 md:h-10 md:w-10 items-center justify-center rounded-2xl bg-gradient-to-r from-black-600 to-white text-white font-bold shadow-lg">
+              J
+            </div>
+            <div>
+              <p className="text-sm font-medium text-indigo-200">Employer Portal</p>
+              <h2 className="text-2xl font-bold">Welcome to JobSphere</h2>
+            </div>
+          </div>
+
+          <p className="text-3xl font-bold mt-4 bg-gradient-to-r from-white to-indigo-200 bg-clip-text text-transparent">
+            Hey! {user?.fullName}
+          </p>
+
+          <div className="mt-4 flex flex-wrap gap-3">
+            <span className="px-3 py-1 bg-white/20 rounded-full text-sm backdrop-blur-sm">
+              Post Jobs
+            </span>
+            <span className="px-3 py-1 bg-white/20 rounded-full text-sm backdrop-blur-sm">
+              Find Talent
+            </span>
+            <span className="px-3 py-1 bg-white/20 rounded-full text-sm backdrop-blur-sm">
+              Grow Team
+            </span>
+          </div>
+
+          <p className="text-indigo-100 mt-4 text-sm">
+            Post jobs, find top talent, and grow your team
+          </p>
+        </div>
+      </div>
       {/* Stats Cards */}
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
         <div className="bg-white rounded-xl p-4 shadow-sm border border-gray-100">
@@ -214,7 +244,7 @@ function EmployerDashboard() {
       {!showForm && (
         <button
           onClick={() => setShowForm(true)}
-          className="w-full py-4 bg-gradient-to-r from-indigo-600 to-purple-600 text-white rounded-xl hover:shadow-lg transition-all duration-200 font-medium flex items-center justify-center gap-2"
+          className="w-full py-4 bg-gradient-to-r from-slate-700 to-slate-800 text-white rounded-xl hover:shadow-lg transition-all duration-200 font-medium flex items-center justify-center gap-2"
         >
           <Plus className="w-5 h-5" />
           Post a New Job
@@ -339,7 +369,7 @@ function EmployerDashboard() {
 
             <button
               type="submit"
-              className="w-full py-3 bg-gradient-to-r from-indigo-600 to-purple-600 text-white rounded-lg hover:shadow-lg transition-all duration-200 font-medium"
+              className="w-full py-3 bg-gradient-to-r from-slate-700 to-slate-800 text-white rounded-lg hover:shadow-lg transition-all duration-200 font-medium"
             >
               {editId ? "Update Job" : "Post Job"}
             </button>
@@ -499,18 +529,22 @@ function EmployerDashboard() {
                         Reject
                       </button>
 
-                      <Link to={`/profile/${app.userId}`}>
-                        <button>View Profile</button>
-                      </Link>
                     </div>
 
-                    <button
-                      onClick={() => analyzeCandidate(app._id)}
-                      className="bg-purple-600 text-white px-3 py-2 rounded mt-2"
-                    >
-                      Analyze Candidate
-                    </button>
+                    <div className="mt-4 flex flex-col md:flex-row gap-4">
+                      <Link to={`/profile/${app.userId}`}>
+                        <button className="w-52 bg-gradient-to-r from-slate-700 to-slate-800 text-white px-3 py-2 rounded-xl">
+                          View Profile
+                        </button>
+                      </Link>
 
+                      <button
+                        onClick={() => analyzeCandidate(app._id)}
+                        className="w-52 bg-gradient-to-r from-purple-600 to-indigo-600 hover:from-purple-700 hover:to-indigo-700 text-white px-3 py-2 rounded-xl"
+                      >
+                        Analyze Candidate
+                      </button>
+                    </div>
                     {aiAnalysis && (
                       <div className="bg-gray-100 p-3 mt-3 rounded">
 

@@ -1,7 +1,7 @@
 import { SignOutButton, UserButton, useUser } from "@clerk/clerk-react";
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
-import { Bell, ChevronDown, Settings, HelpCircle, FileText, Briefcase, LogOut, UserCircle } from "lucide-react";
+import { X, Menu, Bell, ChevronDown, Settings, HelpCircle, FileText, Briefcase, LogOut, UserCircle } from "lucide-react";
 
 function Layout({ children, role }) {
     const { user } = useUser();
@@ -28,9 +28,9 @@ function Layout({ children, role }) {
     return (
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
             {/* Header */}
-            <header className="bg-white/80 backdrop-blur-sm rounded-2xl shadow-sm border border-gray-100 p-4 mb-6 sticky top-4 z-50">
+            <header className="bg-slate-900/80 backdrop-blur-md rounded-2xl shadow-sm p-4 mb-6 sticky top-4 z-50">
                 <div className="flex items-center justify-between">
-                    <div className="flex items-center gap-3">
+                    {/* <div className="flex items-center gap-3">
                         <div className="w-10 h-10 bg-gradient-to-r from-blue-500 to-indigo-600 rounded-xl hidden min-[375px]:flex items-center justify-center shadow-md">
                             <Briefcase className="w-5 h-5 text-white" />
                         </div>
@@ -38,158 +38,169 @@ function Layout({ children, role }) {
                             <h1 className="text-xl font-bold bg-gradient-to-r from-blue-600 to-indigo-600 bg-clip-text text-transparent">
                                 JobSphere
                             </h1>
-                            <p className="hidden md:block text-xs text-gray-500">Welcome back, {user?.fullName}</p>
                         </div>
+                            <p className="hidden md:block text-xs text-gray-500">Welcome back, {user?.fullName}</p>
+                    </div> */}
+                    <div className="flex items-center gap-3">
+                        <div className="hidden min-[375px]:flex h-10 w-10 items-center justify-center rounded-2xl bg-gradient-to-r from-gray-600 to-white text-white font-bold shadow-lg">
+                            J
+                        </div>
+                        <div>
+                            <h1 className="text-2xl font-bold text-white bg-clip-text">
+                                JobSphere
+                            </h1>
+                            <p className="hidden md:block text-xs text-gray-300">Welcome back, {user?.fullName}</p>
+                        </div>
+
                     </div>
 
 
 
+                    {/* Mobile Navigation */}
+                    {role === "seeker" ? (
+                        <div className="flex md:hidden">
 
-{/* Mobile Navigation */}
-{role === "seeker" ? (
-<div className="flex md:hidden">
-  <div className="relative inline-block">
-    {/* Menu Button */}
-    <button
-      onClick={() => setIsOpen(!isOpen)}
-      className="inline-flex w-full justify-center gap-x-1.5 rounded-md px-3 py-2 text-sm font-semibold text-black hover:bg-gray-200"
-    >
-      Menu
-      <ChevronDown className={`size-5 text-gray-500 transition-transform ${isOpen ? 'rotate-180' : ''}`} />
-    </button>
+                            <UserButton />
 
-    {/* Dropdown Menu - NO backdrop overlay */}
-    {isOpen && (
-      <div
-        className="absolute -left-36 mt-2 w-56 rounded-xl shadow-xl border border-gray-100 bg-gray-200 backdrop-blur-3xl"
-        onMouseLeave={() => setIsOpen(false)}>
-        {/* Role Badge */}
-        <div className="">
-          <div className="inline-flex justify-center px-3 bg-white rounded-t-xl w-full py-4 text-sm font-bold text-blue-600">
-            {role === "seeker" ? "Job Seeker" : "Employer"}
-          </div>
-        </div>
+                            <div className="relative inline-block">
+                                {/* Menu Button */}
+                                <button
+                                    onClick={() => setIsOpen(!isOpen)}
+                                    className="inline-flex w-full justify-center gap-x-1.5 rounded-md px-3 py-2 text-sm font-semibold text-gray-300 hover:bg-gray-200"
+                                >
+                                    {isOpen ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}
+                                </button>
 
-        {/* Seeker Menu Items */}
-        {role === "seeker" && (
-          <>
-            <Link to="/ManageSeekerProfile" onClick={() => setIsOpen(false)}>
-              <div className="flex items-center gap-3 px-4 py-2.5 text-sm text-gray-700 hover:bg-gray-50 transition-colors cursor-pointer">
-                <UserCircle className="w-4 h-4 text-green-600" />
-                <span>Manage Profile</span>
-              </div>
-            </Link>
+                                {/* Dropdown Menu - NO backdrop overlay */}
+                                {isOpen && (
+                                    <div className="absolute -left-41 mt-2 w-56 rounded-xl shadow-xl bg-gray-800"
+                                        onMouseLeave={() => setIsOpen(false)}>
+                                        {/* Role Badge */}
+                                        <div className="">
+                                            <div className="inline-flex justify-center px-3 rounded-t-xl w-full py-4 text-sm font-bold text-gray-500">
+                                                {role === "seeker" ? "Job Seeker" : "Employer"}
+                                            </div>
+                                        </div>
 
-            <Link to="/Notifications" onClick={() => setIsOpen(false)}>
-              <div className="flex items-center justify-between px-4 py-2.5 text-sm text-gray-700 hover:bg-gray-50 transition-colors cursor-pointer">
-                <div className="flex items-center gap-3">
-                  <Bell className="w-4 h-4 text-indigo-500" />
-                  <span>Notifications</span>
-                </div>
-                {unreadCount > 0 && (
-                  <span className="bg-red-500 text-white text-xs font-medium rounded-full px-2 py-0.5">
-                    {unreadCount}
-                  </span>
-                )}
-              </div>
-            </Link>
-          </>
-        )}
+                                        {/* Seeker Menu Items */}
+                                        {role === "seeker" && (
+                                            <>
+                                                <Link to="/ManageSeekerProfile" onClick={() => setIsOpen(false)}>
+                                                    <div className="flex items-center gap-3 px-4 py-2.5 text-sm text-gray-300 hover:bg-gray-50 transition-colors cursor-pointer">
+                                                        <UserCircle className="w-4 h-4 text-gray-100" />
+                                                        <span>Manage Profile</span>
+                                                    </div>
+                                                </Link>
 
-        <hr className="my-2 border-gray-100" />
-
-        {/* Sign Out */}
-        <button
-          onClick={() => {
-            // Sign out logic
-            setIsOpen(false);
-          }}
-          className="flex w-full items-center gap-3 px-4 py-2.5 text-sm text-red-600 hover:bg-red-50 transition-colors"
-        >
-          <LogOut className="w-4 h-4" />
-          <span>Sign Out</span>
-        </button>
-      </div>
-    )}
-  </div>
-  <UserButton />
-</div>) : (
-    <div className="flex items-center gap-4">
-                        {role && (
-                            <div className="px-3 py-1 bg-blue-50 rounded-full text-sm text-blue-600 font-medium">
-                                {role === "seeker" ? "Job Seeker" : "Employer"}
-                            </div>
-                        )}
-
-                        {role === "seeker" && (
-                            <div className="flex items-center gap-3">
-                                <Link to="/ManageSeekerProfile">
-                                    <button className="px-3 py-1 bg-green-50 text-green-600 rounded-full text-sm font-medium hover:bg-green-100 transition-colors">
-                                        Manage Profile
-                                    </button>
-                                </Link>
-                                <Link to="/Notifications">
-                                    <div className="relative">
-                                        <Bell className="w-6 h-6 text-indigo-500" />
-                                        {unreadCount > 0 && (
-                                            <span className="absolute -top-2 -right-2 bg-red-500 text-white text-xs rounded-full w-5 h-5 flex items-center justify-center">
-                                                {unreadCount}
-                                            </span>
+                                                <Link to="/Notifications" onClick={() => setIsOpen(false)}>
+                                                    <div className="flex items-center justify-between px-4 py-2.5 text-sm text-gray-300 hover:bg-gray-50 transition-colors cursor-pointer">
+                                                        <div className="flex items-center gap-3">
+                                                            <Bell className="w-4 h-4 text-gray-100" />
+                                                            <span>Notifications</span>
+                                                        </div>
+                                                        {unreadCount > 0 && (
+                                                            <span className="bg-red-500 text-white text-xs font-medium rounded-full px-2 py-0.5">
+                                                                {unreadCount}
+                                                            </span>
+                                                        )}
+                                                    </div>
+                                                </Link>
+                                            </>
                                         )}
+
+                                        <hr className="my-2 border-gray-600" />
+
+                                        {/* Sign Out */}
+                                        <button
+                                            onClick={() => {
+                                                // Sign out logic
+                                                setIsOpen(false);
+                                            }}
+                                            className="flex w-full items-center gap-3 px-4 py-2.5 text-sm text-red-600 hover:bg-red-50 transition-colors"
+                                        >
+                                            <LogOut className="w-4 h-4" />
+                                            <span>Sign Out</span>
+                                        </button>
                                     </div>
-                                </Link>
+                                )}
                             </div>
-                        )}
-                        <UserButton />
-                        {/* <SignOutButton> */}
-                        {/* <button className="flex items-center gap-2 px-4 py-2 text-gray-600 hover:text-red-600 hover:bg-red-50 rounded-xl transition-all duration-200"> */}
-                        {/* <LogOut className="w-4 h-4" /> */}
-                        {/* <span className="hidden sm:inline">Sign Out</span> */}
-                        {/* </button> */}
-                        {/* </SignOutButton> */}
-                    </div>
-)}
+                        </div>) : (
+                        <div className="flex items-center gap-4">
+                            {role && (
+                                <div className="px-3 py-1 rounded-full text-sm text-gray-100 bg-white/40 font-medium">
+                                    {role === "seeker" ? "Job Seeker" : "Employer"}
+                                </div>
+                            )}
+
+                            {role === "seeker" && (
+                                <div className="flex items-center gap-3">
+                                    <Link to="/ManageSeekerProfile">
+                                        <button className="px-3 py-1 bg-green-50 text-green-600 rounded-full text-sm font-medium hover:bg-green-100 transition-colors">
+                                            Manage Profile
+                                        </button>
+                                    </Link>
+                                    <Link to="/Notifications">
+                                        <div className="relative">
+                                            <Bell className="w-6 h-6 text-indigo-500" />
+                                            {unreadCount > 0 && (
+                                                <span className="absolute -top-2 -right-2 bg-red-500 text-white text-xs rounded-full w-5 h-5 flex items-center justify-center">
+                                                    {unreadCount}
+                                                </span>
+                                            )}
+                                        </div>
+                                    </Link>
+                                </div>
+                            )}
+                            <UserButton />
+                            {/* <SignOutButton> */}
+                            {/* <button className="flex items-center gap-2 px-4 py-2 text-gray-600 hover:text-red-600 hover:bg-red-50 rounded-xl transition-all duration-200"> */}
+                            {/* <LogOut className="w-4 h-4" /> */}
+                            {/* <span className="hidden sm:inline">Sign Out</span> */}
+                            {/* </button> */}
+                            {/* </SignOutButton> */}
+                        </div>
+                    )}
 
 
-{/* Desktop Navigation */}
-    {role === "seeker" && (
-                    <div className="hidden md:flex items-center gap-4">
-                        {role && (
-                            <div className="px-3 py-1 bg-blue-50 rounded-full text-sm text-blue-600 font-medium">
-                                {role === "seeker" ? "Job Seeker" : "Employer"}
-                            </div>
-                        )}
+                    {/* Desktop Navigation */}
+                    {role === "seeker" && (
+                        <div className="hidden md:flex items-center gap-4">
+                            {role && (
+                                <div className="px-3 py-1 rounded-full text-sm text-gray-100 bg-white/40 font-medium">
+                                    {role === "seeker" ? "Job Seeker" : "Employer"}
+                                </div>
+                            )}
 
-                        {role === "seeker" && (
-                            <div className="flex items-center gap-3">
-                                <Link to="/ManageSeekerProfile">
-                                    <button className="px-3 py-1 bg-green-50 text-green-600 rounded-full text-sm font-medium hover:bg-green-100 transition-colors">
-                                        Manage Profile
-                                    </button>
-                                </Link>
-                                <Link to="/Notifications">
-                                    <div className="relative">
-                                        <Bell className="w-6 h-6 text-indigo-500" />
-                                        {unreadCount > 0 && (
-                                            <span className="absolute -top-2 -right-2 bg-red-500 text-white text-xs rounded-full w-5 h-5 flex items-center justify-center">
-                                                {unreadCount}
-                                            </span>
-                                        )}
-                                    </div>
-                                </Link>
-                            </div>
-                        )}
-                        <UserButton />
-                        {/* <SignOutButton> */}
-                        {/* <button className="flex items-center gap-2 px-4 py-2 text-gray-600 hover:text-red-600 hover:bg-red-50 rounded-xl transition-all duration-200"> */}
-                        {/* <LogOut className="w-4 h-4" /> */}
-                        {/* <span className="hidden sm:inline">Sign Out</span> */}
-                        {/* </button> */}
-                        {/* </SignOutButton> */}
-                    </div>
-    )}
+                            {role === "seeker" && (
+                                <div className="flex items-center gap-3">
+                                    <Link to="/ManageSeekerProfile">
+                                        <button className="px-3 py-1 text-gray-300 rounded-full text-sm font-medium hover:bg-white/40 transition-colors">
+                                            Manage Profile
+                                        </button>
+                                    </Link>
+                                    <Link to="/Notifications">
+                                        <div className="relative">
+                                            <Bell className="w-6 h-6 text-gray-300" />
+                                            {unreadCount > 0 && (
+                                                <span className="absolute -top-2 -right-2 bg-red-500 text-white text-xs rounded-full w-5 h-5 flex items-center justify-center">
+                                                    {unreadCount}
+                                                </span>
+                                            )}
+                                        </div>
+                                    </Link>
+                                </div>
+                            )}
+                            <UserButton />
+                            {/* <SignOutButton> */}
+                            {/* <button className="flex items-center gap-2 px-4 py-2 text-gray-600 hover:text-red-600 hover:bg-red-50 rounded-xl transition-all duration-200"> */}
+                            {/* <LogOut className="w-4 h-4" /> */}
+                            {/* <span className="hidden sm:inline">Sign Out</span> */}
+                            {/* </button> */}
+                            {/* </SignOutButton> */}
+                        </div>
+                    )}
 
-   
+
 
                 </div>
             </header>

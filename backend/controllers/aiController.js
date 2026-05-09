@@ -21,6 +21,22 @@ const callGemini = async (model, prompt) => {
     return res.data?.candidates?.[0]?.content?.parts?.[0]?.text || "";
 };
 
+
+// Get chat history
+exports.getChatHistory = async (req, res) => {
+    try {
+        const { userId } = req.params;
+        const chat = await Chat.findOne({ userId });
+        if (!chat) {
+            return res.status(400).json({ message: "No chat history found" });
+        }
+        res.json(chat.messages);
+    } catch (error) {
+        console.log(error);
+        res.status(500).json({ message: "Error fetching chat history" });
+    }
+}
+
 // Main function to match jobs
 exports.matchJobs = async (req, res) => {
     try {
@@ -183,21 +199,45 @@ exports.chatWithAI = async (req, res) => {
         });
 
         // 6. Build prompt
-        const prompt = `
-You are a career assistant AI.
+const prompt = `
+You are a natural, intelligent, and professional AI assistant inside a modern job platform.
 
-USER RESUME:
-${resume.resumeText}
+Your responses should feel similar to ChatGPT or Claude:
+- conversational
+- concise
+- calm
+- professional
+- human-like
 
-CHAT HISTORY:
-${historyText}
+Adapt your response length to the user's message.
 
-CURRENT USER QUESTION:
+Rules:
+- Keep simple questions short.
+- Do not over-explain.
+- Do not assume the user wants a full analysis unless explicitly asked.
+- Match the depth of the response to the question.
+- Avoid robotic or overly enthusiastic wording.
+- Avoid recruiter-style or motivational language.
+- Avoid buzzwords and filler.
+- Avoid dramatic phrasing.
+- Avoid section headers like "The Good", "Verdict", "Summary", etc.
+- Do not use markdown formatting.
+- Do not use markdown bullets (*, #, -, etc.).
+- Keep formatting clean and natural.
+
+For resume-related questions:
+- Be honest, practical, and direct.
+- Give concise observations unless the user asks for detailed feedback.
+- If the user asks for a rating only, give a short rating with 1-2 brief reasons.
+
+Resume:
+${resume.resumeText || "No resume uploaded"}
+
+User:
 ${message}
-
-Answer professionally and clearly.
 `;
-
+// Conversation history:
+// ${historyText || "No previous conversation"}
         // 7. Call Gemini
         let aiReply;
         try {
@@ -210,6 +250,13 @@ Answer professionally and clearly.
             aiReply = await callGemini("gemini-3.1-flash-lite-preview", prompt);
             console.log("Using Gemini 3.1 Flash Lite Preview");
         }
+
+        aiReply = aiReply
+            .replace(/^```[\s\S]*?```$/gm, '') // Remove code blocks
+            .replace(/^#+\s/gm, '') // Remove markdown headers
+            .replace(/\*\*(.*?)\*\*/g, '$1') // Remove bold
+            .replace(/\*(.*?)\*/g, '$1') // Remove italic
+            .trim();
 
         // 8. Save assistant reply
         chat.messages.push({

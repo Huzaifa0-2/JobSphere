@@ -175,10 +175,45 @@ function SeekerDashboard() {
     return (
         <div className="space-y-6">
             {/* Welcome Banner */}
-            <div className="bg-gradient-to-r from-blue-600 to-indigo-600 rounded-2xl p-6 text-white">
-                <h2 className="text-2xl font-bold mb-2">Welcome to JobSphere</h2>
-                <p className="text-blue-100">Find your dream job and take the next step in your career</p>
+            <div className="relative overflow-hidden bg-gradient-to-r from-slate-700 to-slate-800 rounded-2xl p-6 text-white shadow-xl">
+        {/* Animated background circles */}
+        {/* <div className="absolute top-0 -right-20 w-40 h-40 bg-white/10 rounded-full blur-2xl"></div>
+        <div className="absolute -bottom-10 -left-10 w-32 h-32 bg-white/10 rounded-full blur-2xl"></div>
+        <div className="absolute top-20 left-1/2 w-24 h-24 bg-yellow-400/10 rounded-full blur-xl"></div> */}
+
+        {/* Content */}
+        <div className="relative z-10">
+          <div className="flex items-center gap-3 mb-3">
+            <div className="hidden min-[375px]:flex h-10 w-13 md:h-10 md:w-10 items-center justify-center rounded-2xl bg-gradient-to-r from-black-600 to-white text-white font-bold shadow-lg">
+              J
             </div>
+            <div>
+              <p className="text-sm font-medium text-indigo-200">Seeker Portal</p>
+              <h2 className="text-2xl font-bold">Welcome to JobSphere</h2>
+            </div>
+          </div>
+
+          <p className="text-3xl font-bold mt-4 bg-gradient-to-r from-white to-indigo-200 bg-clip-text text-transparent">
+            Hey! {user?.fullName}
+          </p>
+
+          <div className="mt-4 flex flex-wrap gap-3">
+            <span className="px-3 py-1 bg-white/20 rounded-full text-sm backdrop-blur-sm">
+              Find Jobs
+            </span>
+            <span className="px-3 py-1 bg-white/20 rounded-full text-sm backdrop-blur-sm">
+              Find Companies
+            </span>
+            <span className="px-3 py-1 bg-white/20 rounded-full text-sm backdrop-blur-sm">
+              Grow Career
+            </span>
+          </div>
+
+          <p className="text-indigo-100 mt-4 text-sm">
+            Find jobs, find top companies, and grow your career
+          </p>
+        </div>
+      </div>
 
             {/* AI Suggestion Button */}
             <div className="my-8 grid grid-cols-1 md:grid-cols-2 justify-items-center">
@@ -345,7 +380,7 @@ function SeekerDashboard() {
                                                 <div className="flex justify-center gap-4">
                                                     <button
                                                         onClick={() => getJobDetails(match.jobId)}
-                                                        className="mt-2 px-2 md:px-4 py-2.5 bg-green-50 text-green-600 rounded-lg text-sm font-medium hover:bg-green-100 transition-colors
+                                                        className="cursor-pointer mt-2 px-2 md:px-4 py-2.5 bg-green-50 text-green-600 rounded-lg text-sm font-medium hover:bg-green-100 transition-colors
                                                         flex items-center justify-center gap-2"
                                                     >
                                                         <div className="flex items-center gap-1 py-2">
@@ -488,7 +523,7 @@ function SeekerDashboard() {
                                     Apply
                                 </button> */}
                                 <div onClick={() => navigate(`/job/${job._id}`)}
-                                    className="px-3 py-1 bg-green-50 text-green-600 rounded-full text-sm font-medium hover:bg-green-100 transition-colors"
+                                    className="cursor-pointer px-3 py-1 bg-green-50 text-green-600 rounded-full text-sm font-medium hover:bg-green-100 transition-colors"
                                 >
                                     <div className="flex items-center gap-1 py-2">
                                         <Eye className="w-5 h-5 text-green-600 hover:text-green-700" />
