@@ -344,8 +344,7 @@ function SeekerDashboard() {
                             <button onClick={() => setShowApplications(false)} className="p-1 hover:bg-gray-100 rounded"><X className="w-5 h-5" /></button>
                         </div>
                         <div className="p-5 space-y-4">
-                            {/* Filter applications with jobId, render only applications where jobId is not null / job not deleted */}
-                            {applications.filter(app => app.jobId).map((app) => (
+                            {applications.map(app => (
                                 <div key={app._id} className="border rounded-lg p-4 hover:shadow-md transition">
                                     <div className="flex flex-col md:flex-row md:items-center justify-between gap-3">
                                         <div>
@@ -372,7 +371,7 @@ function SeekerDashboard() {
                 <div className="fixed inset-0 bg-black/50 backdrop-blur-sm flex items-center justify-center z-50 p-4">
                     <div className="bg-white rounded-2xl max-w-4xl w-full max-h-[85vh] overflow-y-auto">
                         <div className="sticky top-0 bg-white border-b p-4 flex justify-between items-center">
-                            <h2 className="text-2xl font-bold">🎯 AI Job Matches</h2>
+                            <h2 className="text-2xl font-bold">AI Job Matches</h2>
                             <button onClick={() => setShowPopup(false)} className="p-2 hover:bg-gray-100 rounded-full"><X className="w-5 h-5" /></button>
                         </div>
                         <div className="p-6">

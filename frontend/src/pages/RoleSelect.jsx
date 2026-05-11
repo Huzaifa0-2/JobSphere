@@ -10,7 +10,7 @@ function RoleSelect({ setRole }) {
   const selectRole = async (role) => {
     setLoading(true);
     setSelectedRole(role);
-    
+
     const res = await fetch("http://localhost:5000/users", {
       method: "POST",
       headers: {
@@ -18,7 +18,8 @@ function RoleSelect({ setRole }) {
       },
       body: JSON.stringify({
         clerkId: user.id,
-        role
+        role,
+        email: user.primaryEmailAddress.emailAddress,
       })
     });
 
@@ -73,7 +74,7 @@ function RoleSelect({ setRole }) {
             const Icon = role.icon;
             const isSelected = selectedRole === role.id;
             const isLoading = loading && isSelected;
-            
+
             return (
               <button
                 key={role.id}
@@ -81,8 +82,8 @@ function RoleSelect({ setRole }) {
                 disabled={loading}
                 className={`
                   group relative p-6 rounded-2xl text-left transition-all duration-300
-                  ${isSelected 
-                    ? `bg-gradient-to-br ${role.gradient} text-white shadow-xl scale-105` 
+                  ${isSelected
+                    ? `bg-gradient-to-br ${role.gradient} text-white shadow-xl scale-105`
                     : 'bg-white border-2 border-gray-100 hover:shadow-xl hover:scale-105'
                   }
                   ${loading && !isSelected ? 'opacity-50 cursor-not-allowed' : ''}
@@ -95,12 +96,12 @@ function RoleSelect({ setRole }) {
                 `}>
                   <Icon className={`w-7 h-7 ${isSelected ? 'text-white' : role.iconColor}`} />
                 </div>
-                
+
                 {/* Title */}
                 <h2 className={`text-xl font-bold mb-2 ${isSelected ? 'text-white' : 'text-gray-900'}`}>
                   {role.title}
                 </h2>
-                
+
                 {/* Description */}
                 <p className={`text-sm ${isSelected ? 'text-white/80' : 'text-gray-500'}`}>
                   {role.description}

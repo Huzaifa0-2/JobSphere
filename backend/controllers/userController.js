@@ -3,12 +3,12 @@ const User = require("../models/User");
 // Create or get user
 exports.createUser = async (req, res) => {
   try {
-    const { clerkId, role } = req.body;
+    const { clerkId, role, email } = req.body;
 
     let user = await User.findOne({ clerkId });
 
     if (!user) {
-      user = await User.create({ clerkId, role });
+      user = await User.create({ clerkId, role, email });
     }
 
     res.json(user);

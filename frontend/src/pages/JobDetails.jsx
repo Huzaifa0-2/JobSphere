@@ -56,7 +56,7 @@ function JobDetails() {
       return;
     }
     if (!resume) {
-      alert("Please upload your resume first");
+      alert("Please upload your resume and Create your profile first");
       return;
     }
     const result = await dispatch(applyJob({

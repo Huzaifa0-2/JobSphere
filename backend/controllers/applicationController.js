@@ -1,20 +1,22 @@
 const mongoose = require("mongoose");
-const Application = require("../models/Applications");
 const cloudinary = require("../config/cloudinary");
-const streamifier = require("streamifier");
 const pdfParse = require("pdf-parse/lib/pdf-parse");
+const Application = require("../models/Applications");
+const streamifier = require("streamifier");
 const Notification = require("../models/Notification");
+const User = require("../models/User");
 
+const { sendApplicationStatusEmail } = require("../services/emailService");
 
 // GET applications by user (seeker)
 exports.getApplicationsByUser = async (req, res) => {
   try {
     const { userId } = req.params;
 
-    // const applications = await Application.find({ userId });
     const applications = await Application.find({ userId }).populate("jobId");
+    const validApplications = applications.filter(app => app.jobId !== null);
 
-    res.json(applications);
+    res.json(validApplications);
 
   } catch (error) {
     res.status(500).json({ message: "Error fetching user applications" });
@@ -49,7 +51,22 @@ exports.updateApplicationStatus = async (req, res) => {
       id,
       { status },
       { new: true }
-    );
+    ).populate("jobId");
+
+    const user = await User.findOne({
+      clerkId: updated.userId
+    });
+
+    // SEND EMAIL
+    if (user?.email) {
+      await sendApplicationStatusEmail(
+        user.email,
+        updated.jobId.title,
+        status,
+        updated.jobId.company,
+        updated.userName
+      );
+    }
 
     res.json(updated);
 
@@ -69,7 +86,6 @@ exports.updateApplicationStatus = async (req, res) => {
 };
 
 // APPLY JOB
-
 exports.applyJob = async (req, res) => {
   try {
     const { userId, jobId, userName, resumeId, resumeUrl } = req.body;
@@ -97,29 +113,6 @@ exports.applyJob = async (req, res) => {
     res.status(500).json({ message: "Error applying job" });
   }
 };
-
-// exports.applyJob = async (req, res) => {
-//   try {
-//     const { userId, userName, jobId, resumeId, resumeUrl } = req.body;
-
-//     if (!resumeId) {
-//       return res.status(400).json({ message: "Upload resume first" });
-//     }
-
-//     const application = await Application.create({
-//       userId,
-//       userName,
-//       jobId,
-//       resumeId,
-//       resumeUrl
-//     });
-
-//     res.json(application);
-
-//   } catch (error) {
-//     res.status(500).json({ message: "Error applying job" });
-//   }
-// };
 
 // CHECK if user has already applied for a job
 exports.checkApplication = async (req, res) => {
