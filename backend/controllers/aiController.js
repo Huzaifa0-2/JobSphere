@@ -199,7 +199,7 @@ exports.chatWithAI = async (req, res) => {
         });
 
         // 6. Build prompt
-const prompt = `
+        const prompt = `
 You are a natural, intelligent, and professional AI assistant inside a modern job platform.
 
 Your responses should feel similar to ChatGPT or Claude:
@@ -236,8 +236,8 @@ ${resume.resumeText || "No resume uploaded"}
 User:
 ${message}
 `;
-// Conversation history:
-// ${historyText || "No previous conversation"}
+        // Conversation history:
+        // ${historyText || "No previous conversation"}
         // 7. Call Gemini
         let aiReply;
         try {
@@ -374,3 +374,112 @@ RULES:
         });
     }
 };
+
+
+// Generate Interview Questions
+exports.generateInterviewQuestions =
+    async (req, res) => {
+
+        try {
+
+            const { resumeText, jobTitle, jobDescription, jobRequirements } = req.body;
+
+            // // Fetch application
+            // const application =
+            //     await Application.findById(applicationId)
+            //         .populate("jobId")
+            //         .populate("resumeId");
+
+            if (!resumeText || !jobTitle || !jobDescription || !jobRequirements) {
+                return res.status(404).json({
+                    message: "Missing required fields"
+                });
+            }
+
+            // const job = application.jobId;
+
+            // const resume = application.resumeId;
+
+            // const resumeText = resume.resumeText;
+
+            // AI Prompt
+            const prompt = `
+You are an expert technical interviewer.
+
+JOB DETAILS:
+Title: ${jobTitle}
+
+Description:
+${jobDescription || ""}
+
+Requirements:
+${jobRequirements}
+
+
+CANDIDATE RESUME:
+${resumeText}
+
+
+TASK:
+Generate personalized interview questions.
+
+RETURN JSON ONLY:
+
+{
+  "technical": [],
+  "behavioral": [],
+  "projectBased": []
+}
+
+RULES:
+- 5 technical questions
+- 3 behavioral questions
+- 3 project-based questions
+- Questions must relate to BOTH resume and job
+- RETURN ONLY JSON
+`;
+
+
+
+            // Call Gemini
+            let aiText;
+            try {
+                // Try primary model first (faster, cheaper)
+                aiText = await callGemini("gemini-3-flash-preview", prompt);
+                console.log("Using Gemini 3 Flash Preview");
+            } catch (err) {
+                console.log("Primary failed:", err.message);
+                console.log("Switching to fallback model...");
+                // Fallback to more stable model
+                aiText = await callGemini("gemini-3.1-flash-lite-preview", prompt);
+                console.log("Using Gemini 3.1 Flash Lite Preview");
+            }
+
+            // Clean markdown
+            const cleaned = aiText
+                .replace(/```json/g, "")
+                .replace(/```/g, "")
+                .trim();
+
+
+            // Parse JSON
+            const parsed =
+                JSON.parse(cleaned);
+
+
+            res.json({
+                success: true,
+                questions: parsed
+            });
+
+        } catch (error) {
+
+            console.log(error);
+
+            res.status(500).json({
+                success: false,
+                message:
+                    "Failed to generate interview questions"
+            });
+        }
+    };
