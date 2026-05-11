@@ -210,7 +210,7 @@ function JobDetails() {
                 }`}
               >
                 {applied ? (
-                  <>✓ Already Applied</>
+                  <>✓ Applied</>
                 ) : (
                   <>
                     <Send className="w-4 h-4" />
