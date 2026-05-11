@@ -3,7 +3,7 @@ import { useEffect, useState } from "react";
 import { Menu, X } from "lucide-react";
 
 export default function JobSphereLandingPage() {
-  
+
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const { isSignedIn } = useUser();
 
@@ -39,6 +39,10 @@ export default function JobSphereLandingPage() {
 
   const [scrolled, setScrolled] = useState(false);
   const [navbarTop, setNavbarTop] = useState("top-4");
+  const [mainChart, setMainChart] = useState("-bottom-150");
+  const [leftBox, setLeftBox] = useState("-left-260");
+  const [bottomBox, setBottomBox] = useState("-bottom-150");
+  const [searchChartTop, setSearchChartTop] = useState("top-220");
 
   useEffect(() => {
     const handleScroll = () => {
@@ -51,6 +55,31 @@ export default function JobSphereLandingPage() {
       } else {
         setNavbarTop("top-4");
       }
+
+      // Move Chart when scrolled
+      if (isScrolled) {
+        setMainChart("-bottom-30");
+      } else {
+        setMainChart("-bottom-150");
+
+      }
+      if (isScrolled) {
+        setLeftBox("-left-16");
+      } else {
+        setLeftBox("-left-260");
+      }
+
+      if (isScrolled) {
+        setBottomBox("-bottom-10");
+      } else {
+        setBottomBox("-bottom-150");
+      }
+      if (isScrolled) {
+        setSearchChartTop("top-120");
+      } else {
+        setSearchChartTop("top-220");
+      }
+
     };
 
     window.addEventListener("scroll", handleScroll);
@@ -61,9 +90,9 @@ export default function JobSphereLandingPage() {
   return (
     <div className="min-h-screen overflow-hidden bg-[#f5f7ff] text-gray-900">
       {/* Background Blur Orbs */}
-      {/* <div className="pointer-events-none absolute left-0 top-0 h-72 w-72 rounded-full bg-blue-400/30 blur-3xl" />
-      <div className="pointer-events-none absolute right-0 top-40 h-96 w-96 rounded-full bg-indigo-500/20 blur-3xl" />
-      <div className="pointer-events-none absolute bottom-0 left-1/3 h-80 w-80 rounded-full bg-pink-300/20 blur-3xl" /> */}
+      {/* <div className="pointer-events-none absolute left-0 bottom-90 h-72 w-72 rounded-full bg-blue-400 blur-3xl animate-pulse delay-2000" />
+      <div className="pointer-events-none absolute right-0 -bottom-50 h-96 w-96 rounded-full bg-indigo-500 blur-3xl animate-pulse delay-2000" />
+      <div className="pointer-events-none absolute bottom-0 left-1/3 h-80 w-80 rounded-full bg-pink-300 blur-3xl" /> */}
 
       <div className="w-[98vw] h-[90vh] absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-78 md:-translate-y-1/2 rounded-4xl overflow-hidden">
         <div className="absolute inset-0 z-0">
@@ -79,8 +108,8 @@ export default function JobSphereLandingPage() {
 
       <div className="relative z-10 mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
         {/* Navbar */}
-<>
-      {/* <nav className={`
+        <>
+          {/* <nav className={`
         fixed ${navbarTop} left-1/2 -translate-x-1/2 z-50 
         flex items-center justify-between 
         w-[95%] sm:w-[90%] md:w-auto md:min-w-[700px] lg:min-w-[900px]
@@ -95,118 +124,118 @@ export default function JobSphereLandingPage() {
         }
       `}> */}
 
-        <nav className={`fixed ${navbarTop} left-1/2 -translate-x-1/2 z-50 flex items-center justify-between w-[95%]
-                          px-4 md:px-6 py-3 md:py-4 mt-8 rounded-2xl md:rounded-3xl transition-all duration-500 
+          <nav className={`fixed ${navbarTop} left-1/2 -translate-x-1/2 z-50 flex items-center justify-between w-[95%]
+                          px-4 md:px-6 py-3 md:py-4 mt-6 md:mt-8 rounded-2xl md:rounded-3xl transition-all duration-500 
                           ${scrolled ? "bg-slate-900/80 backdrop-blur-md" : "bg-transparent"} `}>
 
 
 
-        {/* Logo */}
-        <div className="flex items-center gap-2 sm:gap-3">
-          <div className="flex h-8 w-8 sm:h-10 sm:w-10 items-center justify-center rounded-xl sm:rounded-2xl bg-gradient-to-r from-gray-600 to-white text-white font-bold shadow-lg">
-            <span className="text-sm sm:text-base">J</span>
-          </div>
-          <h1 className="text-lg sm:text-xl md:text-2xl font-bold text-white bg-clip-text">
-            JobSphere
-          </h1>
-        </div>
+            {/* Logo */}
+            <div className="flex items-center gap-2 sm:gap-3">
+              <div className="flex h-8 w-8 sm:h-10 sm:w-10 items-center justify-center rounded-xl sm:rounded-2xl bg-gradient-to-r from-gray-600 to-white text-white font-bold shadow-lg">
+                <span className="text-sm sm:text-base">J</span>
+              </div>
+              <h1 className="text-lg sm:text-xl md:text-2xl font-bold text-white bg-clip-text">
+                JobSphere
+              </h1>
+            </div>
 
-        {/* Desktop Navigation - Hidden on mobile */}
-        <div className="hidden md:flex items-center gap-6 lg:gap-8 text-sm font-medium text-gray-300">
-          <a href="#" className="hover:text-white transition">Home</a>
-          <a href="#" className="hover:text-white transition">Jobs</a>
-          <a href="#" className="hover:text-white transition">Companies</a>
-          <a href="#" className="hover:text-white transition">Pricing</a>
-          <a href="#" className="hover:text-white transition">Contact</a>
-        </div>
+            {/* Desktop Navigation - Hidden on mobile */}
+            <div className="hidden md:flex items-center gap-6 lg:gap-8 text-sm font-medium text-gray-300">
+              <a href="#" className="hover:text-white transition">Home</a>
+              <a href="#" className="hover:text-white transition">Jobs</a>
+              <a href="#" className="hover:text-white transition">Companies</a>
+              <a href="#" className="hover:text-white transition">Pricing</a>
+              <a href="#" className="hover:text-white transition">Contact</a>
+            </div>
 
-        {/* Desktop Auth Buttons - Hidden on mobile */}
-        <div className="hidden md:flex items-center gap-3">
-          {!isSignedIn && (
-            <>
-              <SignInButton mode="modal">
-                <button className="rounded-xl px-4 lg:px-5 py-2 font-medium text-gray-300 hover:bg-white/10 transition">
-                  Sign In
-                </button>
-              </SignInButton>
-              <SignUpButton mode="modal">
-                <button className="rounded-xl bg-gradient-to-r from-blue-500 to-indigo-600 px-4 lg:px-5 py-2 font-medium text-white shadow-lg hover:scale-105 transition">
-                  Get Started
-                </button>
-              </SignUpButton>
-            </>
-          )}
-        </div>
-
-        {/* Mobile Menu Button */}
-        <button 
-          onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-          className="md:hidden p-2 rounded-lg text-white hover:bg-white/10 transition"
-        >
-          {mobileMenuOpen ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}
-        </button>
-      </nav>
-
-      {/* Mobile Menu Dropdown */}
-      {mobileMenuOpen && (
-        <div className="fixed top-25 left-4 right-4 z-40 md:hidden">
-          <div className="bg-slate-900/95 backdrop-blur-md rounded-2xl p-4 border border-slate-700/50 shadow-xl">
-            <div className="flex flex-col gap-2">
-              <a href="#" className="px-4 py-3 text-gray-300 hover:bg-white/10 rounded-xl transition" onClick={() => setMobileMenuOpen(false)}>
-                Home
-              </a>
-              <a href="#" className="px-4 py-3 text-gray-300 hover:bg-white/10 rounded-xl transition" onClick={() => setMobileMenuOpen(false)}>
-                Jobs
-              </a>
-              <a href="#" className="px-4 py-3 text-gray-300 hover:bg-white/10 rounded-xl transition" onClick={() => setMobileMenuOpen(false)}>
-                Companies
-              </a>
-              <a href="#" className="px-4 py-3 text-gray-300 hover:bg-white/10 rounded-xl transition" onClick={() => setMobileMenuOpen(false)}>
-                Pricing
-              </a>
-              <a href="#" className="px-4 py-3 text-gray-300 hover:bg-white/10 rounded-xl transition" onClick={() => setMobileMenuOpen(false)}>
-                Contact
-              </a>
-              
+            {/* Desktop Auth Buttons - Hidden on mobile */}
+            <div className="hidden md:flex items-center gap-3">
               {!isSignedIn && (
-                <div className="flex flex-col gap-2 pt-3 mt-2 border-t border-slate-700">
+                <>
                   <SignInButton mode="modal">
-                    <button className="w-full rounded-xl px-4 py-2.5 font-medium text-gray-300 hover:bg-white/10 transition">
+                    <button className="rounded-xl px-4 lg:px-5 py-2 font-medium text-gray-300 hover:bg-white/10 transition">
                       Sign In
                     </button>
                   </SignInButton>
                   <SignUpButton mode="modal">
-                    <button className="w-full rounded-xl bg-gradient-to-r from-blue-500 to-indigo-600 px-4 py-2.5 font-medium text-white shadow-lg transition">
+                    <button className="rounded-xl bg-gradient-to-r from-blue-500 to-indigo-600 px-4 lg:px-5 py-2 font-medium text-white shadow-lg hover:scale-105 transition">
                       Get Started
                     </button>
                   </SignUpButton>
-                </div>
+                </>
               )}
             </div>
-          </div>
-        </div>
-      )}
-    </>
+
+            {/* Mobile Menu Button */}
+            <button
+              onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
+              className="md:hidden p-2 rounded-lg text-white hover:bg-white/10 transition"
+            >
+              {mobileMenuOpen ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}
+            </button>
+          </nav>
+
+          {/* Mobile Menu Dropdown */}
+          {mobileMenuOpen && (
+            <div className="fixed top-25 left-4 right-4 z-40 md:hidden">
+              <div className="bg-slate-900/95 backdrop-blur-md rounded-2xl p-4 border border-slate-700/50 shadow-xl">
+                <div className="flex flex-col gap-2">
+                  <a href="#" className="px-4 py-3 text-gray-300 hover:bg-white/10 rounded-xl transition" onClick={() => setMobileMenuOpen(false)}>
+                    Home
+                  </a>
+                  <a href="#" className="px-4 py-3 text-gray-300 hover:bg-white/10 rounded-xl transition" onClick={() => setMobileMenuOpen(false)}>
+                    Jobs
+                  </a>
+                  <a href="#" className="px-4 py-3 text-gray-300 hover:bg-white/10 rounded-xl transition" onClick={() => setMobileMenuOpen(false)}>
+                    Companies
+                  </a>
+                  <a href="#" className="px-4 py-3 text-gray-300 hover:bg-white/10 rounded-xl transition" onClick={() => setMobileMenuOpen(false)}>
+                    Pricing
+                  </a>
+                  <a href="#" className="px-4 py-3 text-gray-300 hover:bg-white/10 rounded-xl transition" onClick={() => setMobileMenuOpen(false)}>
+                    Contact
+                  </a>
+
+                  {!isSignedIn && (
+                    <div className="flex flex-col gap-2 pt-3 mt-2 border-t border-slate-700">
+                      <SignInButton mode="modal">
+                        <button className="w-full rounded-xl px-4 py-2.5 font-medium text-gray-300 hover:bg-white/10 transition">
+                          Sign In
+                        </button>
+                      </SignInButton>
+                      <SignUpButton mode="modal">
+                        <button className="w-full rounded-xl bg-gradient-to-r from-blue-500 to-indigo-600 px-4 py-2.5 font-medium text-white shadow-lg transition">
+                          Get Started
+                        </button>
+                      </SignUpButton>
+                    </div>
+                  )}
+                </div>
+              </div>
+            </div>
+          )}
+        </>
 
         {/* Hero Section */}
-        <section className="grid min-h-[90vh] items-center gap-12 py-16 mt-28 lg:grid-cols-2">
+        <section className="grid min-h-[90vh] items-center gap-12 py-16 mt-12 md:mt-28 lg:grid-cols-2">
           {/* Left */}
           <div>
-            <div className="mb-10 inline-flex items-center gap-2 rounded-full border border-white/20 bg-white/40 px-4 py-2 text-sm font-medium text-gray-300 backdrop-blur-lg shadow-md">
+            <div className="animate-in slide-in-from-left-100 duration-500 mb-10 inline-flex items-center gap-2 rounded-full border border-white/20 bg-white/40 px-4 py-2 text-sm font-medium text-gray-300 backdrop-blur-lg shadow-md">
               The Smartest AI Job Platform
             </div>
 
-            <h1 className="mb-12 text-3xl font-black leading-tight text-white md:text-6xl">
+            <h1 className="animate-in slide-in-from-bottom-50 duration-700 mb-12 text-3xl font-black leading-tight text-white md:text-6xl">
               Find Your Dream Job with AI-Powered Precision
             </h1>
 
-            <p className="mt-6 max-w-xl text-lg leading-relaxed text-gray-300">
+            <p className="animate-in slide-in-from-left-100 duration-500 mt-6 max-w-xl text-lg leading-relaxed text-gray-300">
               Discover thousands of opportunities from top companies worldwide.
               AI-powered matching, instant applications, and real-time hiring insights.
             </p>
 
             {/* Search */}
-            <div className="mt-16 rounded-3xl border border-white/20 bg-white/40 p-4 shadow-2xl backdrop-blur-xl">
+            <div className={`absolute left-9 md:left-0 ${searchChartTop} duration-700 mt-6 md:mt-16 rounded-3xl border border-white/20 bg-white/40 p-4 shadow-2xl backdrop-blur-xl`}>
               <div className="grid gap-4 md:grid-cols-3">
                 <input
                   type="text"
@@ -227,7 +256,7 @@ export default function JobSphereLandingPage() {
             </div>
 
             {/* Trusted Companies */}
-            <div className="mt-10">
+            <div className="mt-80 md:mt-56">
               <p className="mb-4 text-sm font-medium text-gray-500">
                 Trusted by top companies
               </p>
@@ -245,7 +274,7 @@ export default function JobSphereLandingPage() {
           {/* Right */}
           <div className="relative flex items-center justify-center">
             {/* Main Dashboard */}
-            <div className="relative w-full max-w-lg rounded-[2rem] border border-white/20 bg-white/30 p-6 shadow-2xl backdrop-blur-2xl">
+            <div className={`absolute ${mainChart} mb-20 transition-all duration-500 hidden md:block w-full max-w-lg rounded-[2rem] border border-white/20 bg-white/30 p-6 shadow-2xl backdrop-blur-2xl`}>
               <div className="mb-6 flex items-center justify-between">
                 <div>
                   <p className="text-sm text-gray-500">Applications</p>
@@ -269,13 +298,13 @@ export default function JobSphereLandingPage() {
               </div>
 
               {/* Floating Cards */}
-              <div className="absolute -left-16 top-16 hidden w-48 rounded-3xl border border-white/20 bg-white/40 p-4 shadow-2xl backdrop-blur-xl lg:block">
+              <div className={`absolute ${leftBox} transition-all duration-500 top-16 hidden w-48 rounded-3xl border border-white/20 bg-white/40 p-4 shadow-2xl backdrop-blur-xl md:block`}>
                 <p className="text-sm text-gray-500">New Jobs</p>
                 <h4 className="mt-2 text-3xl font-bold">1.2k+</h4>
                 <p className="mt-2 text-sm text-green-600">↑ 18% this week</p>
               </div>
 
-              <div className="absolute -bottom-10 right-[-30px] hidden w-56 rounded-3xl border border-white/20 bg-white/40 p-5 shadow-2xl backdrop-blur-xl lg:block">
+              <div className={`absolute ${bottomBox} transition-all duration-500 right-[-30px] hidden w-56 rounded-3xl border border-white/20 bg-white/40 p-5 shadow-2xl backdrop-blur-xl md:block`}>
                 <div className="flex items-center gap-3">
                   <div className="h-12 w-12 rounded-2xl bg-gradient-to-r from-blue-500 to-indigo-600" />
                   <div>
