@@ -1,3 +1,4 @@
+import AnalyticsDashboard from "./AnalyticsDashboard";
 import { useEffect, useState } from "react";
 import { useNavigate, Link } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
@@ -31,7 +32,9 @@ import {
   TrendingUp,
   Award,
   Sparkles,
-  Loader2
+  Loader2,
+  ChevronRight,
+  BarChart3,
 } from "lucide-react";
 
 function EmployerDashboard() {
@@ -56,6 +59,15 @@ function EmployerDashboard() {
   const [editId, setEditId] = useState(null);
   const [showForm, setShowForm] = useState(false);
   const [selectedJobId, setSelectedJobId] = useState(null);
+  const [totalApplications, setTotalApplications] = useState(null);
+
+  // for total applications count
+  useEffect(() => {
+    if (!user) return;
+    fetch(`http://localhost:5000/analytics/employer/${user.id}`)
+      .then(res => res.json())
+      .then(data => setTotalApplications(data.totalApplications));
+  }, [user]);
 
   useEffect(() => {
     if (!user) return;
@@ -160,7 +172,7 @@ function EmployerDashboard() {
       </div>
 
       {/* Stats Cards */}
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
         <div className="bg-white rounded-xl p-4 shadow-sm border border-gray-100 hover:shadow-md transition">
           <div className="flex items-center justify-between">
             <div><p className="text-gray-500 text-sm">Job Posts</p><p className="text-2xl font-bold text-gray-900">{jobs.length}</p></div>
@@ -170,18 +182,18 @@ function EmployerDashboard() {
         </div>
         <div className="bg-white rounded-xl p-4 shadow-sm border border-gray-100 hover:shadow-md transition">
           <div className="flex items-center justify-between">
-            <div><p className="text-gray-500 text-sm">Applicants</p><p className="text-2xl font-bold text-gray-900">{applications.length}</p></div>
+            <div><p className="text-gray-500 text-sm">Applicants</p><p className="text-2xl font-bold text-gray-900">{totalApplications}</p></div>
             <div className="w-10 h-10 bg-green-50 rounded-lg flex items-center justify-center"><Users className="w-5 h-5 text-green-600" /></div>
           </div>
           <div className="mt-2 text-xs text-green-600">Total received</div>
         </div>
-        <div className="bg-white rounded-xl p-4 shadow-sm border border-gray-100 hover:shadow-md transition">
+        {/* <div className="bg-white rounded-xl p-4 shadow-sm border border-gray-100 hover:shadow-md transition">
           <div className="flex items-center justify-between">
             <div><p className="text-gray-500 text-sm">Acceptance Rate</p><p className="text-2xl font-bold text-gray-900">68%</p></div>
             <div className="w-10 h-10 bg-purple-50 rounded-lg flex items-center justify-center"><Award className="w-5 h-5 text-purple-600" /></div>
           </div>
           <div className="mt-2 text-xs text-purple-600">+5% this month</div>
-        </div>
+        </div> */}
         <div className="bg-white rounded-xl p-4 shadow-sm border border-gray-100 hover:shadow-md transition">
           <div className="flex items-center justify-between">
             <div><p className="text-gray-500 text-sm">Company Rating</p><p className="text-2xl font-bold text-gray-900">4.8</p></div>
@@ -189,6 +201,35 @@ function EmployerDashboard() {
           </div>
           <div className="mt-2 text-xs text-yellow-600">Top rated employer</div>
         </div>
+      </div>
+
+      {/* Analytics Dashboard */}
+
+      {/* For Mobile View */}
+      <Link to="/analytics" className="fixed bottom-6 right-6 z-50 md:hidden">
+        <div className="w-14 h-14 bg-gradient-to-r from-blue-600 to-indigo-600 rounded-full shadow-lg flex items-center justify-center hover:scale-110 transition-transform">
+          <BarChart3 className="w-6 h-6 text-white" />
+        </div>
+      </Link>
+
+      {/* For Desktop View */}
+      <div className="hidden md:block bg-white rounded-xl p-4 shadow-sm border border-gray-100">
+        <div className="flex items-center justify-between">
+          <div>
+            <p className="text-gray-500 text-sm">Analytics Dashboard</p>
+            <p className="text-2xl font-bold text-gray-900">Reports</p>
+          </div>
+          <Link to="/analytics">
+            <div className="w-10 h-10 bg-purple-50 rounded-lg flex items-center justify-center cursor-pointer hover:bg-purple-100 transition">
+              <BarChart3 className="w-5 h-5 text-purple-600" />
+            </div>
+          </Link>
+        </div>
+        <Link to="/analytics">
+          <button className="mt-3 text-sm text-blue-600 hover:text-blue-700 font-medium flex items-center gap-1">
+            View Analytics <ChevronRight className="w-3 h-3" />
+          </button>
+        </Link>
       </div>
 
       {/* Add Job Button */}

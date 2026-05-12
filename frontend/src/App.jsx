@@ -16,6 +16,7 @@ import JobDetails from "./pages/JobDetails";
 import AIChat from "./pages/AIChat";
 import Notifications from "./components/Notifications";
 import socket from "./socket";
+import AnalyticsDashboard from "./pages/AnalyticsDashboard";
 
 function App() {
   const { user } = useUser();
@@ -73,6 +74,13 @@ function App() {
         <Route path="/job/:jobId" element={
           <Layout>
             <JobDetails />
+          </Layout>
+        } />
+
+        {/* Analytics Dashboard page */}
+        <Route path="/analytics" element={
+          <Layout>
+            <AnalyticsDashboard />
           </Layout>
         } />
 

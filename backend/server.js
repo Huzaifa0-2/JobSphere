@@ -59,6 +59,7 @@ app.use("/profile", require("./routes/profileRoutes"));
 app.use("/resume", require("./routes/resumeRoutes"));
 app.use("/notifications", require("./routes/notificationRoutes"));
 app.use("/ai", require("./routes/aiRoutes"));
+app.use("/analytics", require("./routes/analyticsRoutes"));
 
 
 // CREATE HTTP SERVER
