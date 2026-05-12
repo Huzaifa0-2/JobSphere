@@ -68,8 +68,7 @@ exports.updateApplicationStatus = async (req, res) => {
       );
     }
 
-    res.json(updated);
-
+    
     // Create notification for seeker
     await Notification.create({
       userId: updated.userId,
@@ -79,6 +78,28 @@ exports.updateApplicationStatus = async (req, res) => {
       message:
         `Your application status was updated to ${status}`
     });
+
+    // const notifications = await Notification.find({ userId: updated.userId })
+    // const unreadCount = notifications.filter(n => !n.isRead).length;
+    const notifications = await Notification.find({ userId: updated.userId }).sort({ createdAt: -1 }); // Sort by newest first
+
+    // res.json(notifications);
+
+    const userSocket = global.onlineUsers[updated.userId];
+
+    if (userSocket) {
+
+      // Notification Count Socket
+      global.io.to(userSocket).emit("notificationCountUpdated", notifications);
+
+      // Status SOCKET
+      global.io.to(userSocket).emit("applicationStatusUpdated", {
+        status,
+        jobTitle: updated.jobId.title
+      }
+      );
+    }
+    res.json(updated);
 
   } catch (error) {
     res.status(500).json({ message: "Error updating status" });

@@ -15,12 +15,23 @@ import ManageSeekerProfile from "./components/ManageSeekerProfile";
 import JobDetails from "./pages/JobDetails";
 import AIChat from "./pages/AIChat";
 import Notifications from "./components/Notifications";
-
+import socket from "./socket";
 
 function App() {
   const { user } = useUser();
   const [role, setRole] = useState(null);
   const [loading, setLoading] = useState(true);
+
+
+  // register user with socket server
+  useEffect(() => {
+
+    if (user?.id) {
+
+      socket.emit("register", user.id);
+    }
+
+  }, [user]);
 
   useEffect(() => {
     if (!user) {

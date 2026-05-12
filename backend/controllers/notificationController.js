@@ -7,9 +7,7 @@ exports.getNotifications = async (req, res) => {
 
     const { userId } = req.params;
 
-    const notifications =
-      await Notification.find({ userId })
-        .sort({ createdAt: -1 }); // Sort by newest first
+    const notifications = await Notification.find({ userId }).sort({ createdAt: -1 }); // Sort by newest first
 
     res.json(notifications);
 

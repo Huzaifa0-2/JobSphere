@@ -1,3 +1,5 @@
+import socket from "../socket";
+import { ToastContainer, toast } from 'react-toastify';
 import { useEffect, useState } from "react";
 import { useUser } from "@clerk/clerk-react";
 import { useSelector, useDispatch } from "react-redux";
@@ -76,6 +78,30 @@ function SeekerDashboard() {
             alert("Upload failed");
         }
     };
+
+    // Status Socket
+    useEffect(() => {
+
+        socket.on(
+            "applicationStatusUpdated",
+            (data) => {
+                if (data.status === 'accepted') {
+                    toast.success(`Your application for ${data.jobTitle} was ${data.status}`);
+                } else {
+                    toast.error(`Your application for ${data.jobTitle} was ${data.status}`);
+                }
+
+                dispatch(fetchUserApplications(userId));
+                // fetchApplications();
+            }
+        );
+
+        return () => {
+
+            socket.off("applicationStatusUpdated");
+        };
+
+    }, []);
 
     const fetchApplications = async () => {
         if (!userId) return;
@@ -159,6 +185,7 @@ function SeekerDashboard() {
 
     return (
         <div className="space-y-6 animate-in fade-in duration-500">
+            <ToastContainer position="top-center" autoClose={3000} hideProgressBar={false} newestOnTop={true} closeOnClick rtl={false} pauseOnFocusLoss draggable pauseOnHover theme="light" />
 
             {/* Welcome Banner - Enhanced */}
             <div className="relative overflow-hidden bg-gradient-to-r from-slate-800 via-slate-700 to-slate-800 rounded-2xl p-6 text-white shadow-xl">

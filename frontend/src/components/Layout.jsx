@@ -1,3 +1,4 @@
+import socket from "../socket";
 import { SignOutButton, UserButton, useUser } from "@clerk/clerk-react";
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
@@ -8,6 +9,23 @@ function Layout({ children, role }) {
 
     const [isOpen, setIsOpen] = useState(false);
     const [notifications, setNotifications] = useState([]);
+
+
+    // Notification Socket
+    useEffect(() => {
+
+        socket.on(
+            "notificationCountUpdated",
+            (data) => setNotifications(data)
+        );
+
+        return () => {
+
+            socket.off("notificationCountUpdated");
+        };
+
+    }, []);
+
 
     // Fetch notifications
     useEffect(() => {
