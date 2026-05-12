@@ -64,7 +64,7 @@ function SeekerDashboard() {
 
     const addResume = async () => {
         if (!file) {
-            alert("Select a file first");
+            toast.error("Select a file first");
             return;
         }
         const formData = new FormData();
@@ -72,10 +72,10 @@ function SeekerDashboard() {
         formData.append("userId", user.id);
         try {
             await dispatch(uploadResume(formData)).unwrap();
-            alert("Resume uploaded successfully!");
+            toast.success("Resume uploaded successfully!");
             setFile(null);
         } catch (error) {
-            alert("Upload failed");
+            toast.error("Upload failed");
         }
     };
 
@@ -86,9 +86,11 @@ function SeekerDashboard() {
             "applicationStatusUpdated",
             (data) => {
                 if (data.status === 'accepted') {
-                    toast.success(`Your application for ${data.jobTitle} was ${data.status}`);
-                } else {
-                    toast.error(`Your application for ${data.jobTitle} was ${data.status}`);
+                    toast.success(`Your application for ${data.jobTitle} was ${data.status}!`);
+                } else if (data.status === 'reviewing') {
+                    toast.info(`Your application for ${data.jobTitle} is under review`);
+                } else if (data.status === 'rejected') {
+                    toast.error(`Your application for ${data.jobTitle} was rejected`);
                 }
 
                 dispatch(fetchUserApplications(userId));
@@ -163,11 +165,11 @@ function SeekerDashboard() {
 
     const apply = async (jobId) => {
         if (!user) {
-            alert("Login required");
+            toast.error("Login required");
             return;
         }
         if (!resume) {
-            alert("Please upload your resume first");
+            toast.error("Please upload your resume first");
             return;
         }
         const result = await dispatch(applyJob({
@@ -179,7 +181,7 @@ function SeekerDashboard() {
         }));
         if (result) {
             setAppliedJobs([...appliedJobs, jobId]);
-            alert("Application submitted successfully!");
+            toast.success("Application submitted successfully!");
         }
     };
 

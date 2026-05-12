@@ -57,7 +57,7 @@ export const fetchJobApplications = createAsyncThunk(
   }
 );
 
-// UPDATE STATUS (ACCEPT / REJECT)
+// UPDATE STATUS (ACCEPT / REJECT / REVIEWING)
 export const updateApplicationStatus = createAsyncThunk(
   "applications/updateStatus",
   async ({ id, jobTitle, status }) => {

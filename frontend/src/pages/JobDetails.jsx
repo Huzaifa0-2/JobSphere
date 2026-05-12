@@ -1,3 +1,4 @@
+import { toast, ToastContainer } from "react-toastify";
 import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
@@ -5,9 +6,9 @@ import { fetchSingleJob } from "../features/jobs/jobSlice";
 import { useUser } from "@clerk/clerk-react";
 import { fetchSeekerProfile, getUserResume } from "../features/profile/profileSlice";
 import { applyJob } from "../features/applications/applicationSlice";
-import { 
-  Briefcase, MapPin, DollarSign, Calendar, Clock, Building2, 
-  Send, Loader2, ChevronLeft, FileText, Users, Lightbulb 
+import {
+  Briefcase, MapPin, DollarSign, Calendar, Clock, Building2,
+  Send, Loader2, ChevronLeft, FileText, Users, Lightbulb
 } from "lucide-react";
 
 function JobDetails() {
@@ -56,7 +57,11 @@ function JobDetails() {
       return;
     }
     if (!resume) {
-      alert("Please upload your resume and Create your profile first");
+      toast.error("Please Upload your Resume first");
+      return;
+    }
+    if (!seekerProfile) {
+      toast.error("Please Setup your Profile first");
       return;
     }
     const result = await dispatch(applyJob({
@@ -103,7 +108,7 @@ function JobDetails() {
       </div>
     );
   }
-  
+
   if (!selectedJob) return (
     <div className="min-h-screen flex items-center justify-center">
       <div className="text-center">
@@ -117,8 +122,10 @@ function JobDetails() {
   return (
     <div className="min-h-screen ">
       {/* Back Button */}
+      <ToastContainer position="top-center" autoClose={3000} hideProgressBar={false} newestOnTop={true} closeOnClick rtl={false} pauseOnFocusLoss draggable pauseOnHover theme="light" />
+
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-6">
-        <button 
+        <button
           onClick={() => window.history.back()}
           className="flex items-center gap-2 text-gray-600 hover:text-blue-600 transition-colors"
         >
@@ -129,10 +136,10 @@ function JobDetails() {
 
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
         <div className="grid lg:grid-cols-3 gap-6">
-          
+
           {/* LEFT SIDE - Job Details */}
           <div className="lg:col-span-2 space-y-5">
-            
+
             {/* Job Header Card */}
             <div className="bg-white rounded-2xl shadow-sm border border-gray-100 p-6 hover:shadow-md transition-shadow">
               <div className="flex items-start justify-between flex-wrap gap-4">
@@ -148,7 +155,7 @@ function JobDetails() {
                   <span className="text-green-500 text-sm">/year</span>
                 </div>
               </div>
-              
+
               <div className="flex flex-wrap gap-4 mt-4 pt-4 border-t border-gray-100">
                 <div className="flex items-center gap-2 text-gray-500">
                   <MapPin className="w-4 h-4" />
@@ -190,7 +197,7 @@ function JobDetails() {
 
           {/* RIGHT SIDE - Actions */}
           <div className="space-y-5">
-            
+
             {/* Apply Card */}
             <div className="bg-white rounded-2xl shadow-sm border border-gray-100 p-6 sticky top-24">
               <div className="text-center mb-4">
@@ -199,15 +206,14 @@ function JobDetails() {
                 </div>
                 <h3 className="text-lg font-semibold">Interested in this role?</h3>
               </div>
-              
+
               <button
                 onClick={apply}
                 disabled={applied}
-                className={`w-full py-3 rounded-xl font-semibold transition-all duration-200 flex items-center justify-center gap-2 ${
-                  applied 
-                    ? "bg-gray-300 text-gray-500 cursor-not-allowed" 
-                    : "bg-gradient-to-r from-blue-600 to-indigo-600 text-white hover:shadow-lg hover:scale-[1.02]"
-                }`}
+                className={`w-full py-3 rounded-xl font-semibold transition-all duration-200 flex items-center justify-center gap-2 ${applied
+                  ? "bg-gray-300 text-gray-500 cursor-not-allowed"
+                  : "bg-gradient-to-r from-blue-600 to-indigo-600 text-white hover:shadow-lg hover:scale-[1.02]"
+                  }`}
               >
                 {applied ? (
                   <>✓ Applied</>
@@ -218,7 +224,7 @@ function JobDetails() {
                   </>
                 )}
               </button>
-              
+
               <div className="mt-4 text-sm text-gray-500 space-y-2">
                 <p className="flex items-center justify-between">
                   <span>Experience:</span>
@@ -253,7 +259,7 @@ function JobDetails() {
                     <Lightbulb className="w-4 h-4 text-yellow-500" />
                     AI-Powered Questions
                   </h3>
-                  
+
                   {questions.technical?.length > 0 && (
                     <div className="mb-4">
                       <h4 className="font-semibold text-blue-600 text-sm mb-2">💻 Technical Questions</h4>
