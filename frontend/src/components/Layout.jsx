@@ -75,7 +75,8 @@ function Layout({ children, role }) {
 
 
                     {/* Mobile Navigation */}
-                    {role === "seeker" ? (
+                    {role === "seeker" && (
+                        // If seeker & Small screen then show this
                         <div className="flex md:hidden">
 
                             <UserButton />
@@ -142,7 +143,10 @@ function Layout({ children, role }) {
                                     </div>
                                 )}
                             </div>
-                        </div>) : (
+                        </div>)}
+
+                    {/* If employer then show this (small large same for both) */}
+                    {role === "employer" && (
                         <div className="flex items-center gap-4">
                             {role && (
                                 <div className="px-3 py-1 rounded-full text-sm text-gray-100 bg-white/40 font-medium">
@@ -179,9 +183,13 @@ function Layout({ children, role }) {
                         </div>
                     )}
 
+                    {role === "admin" && (
+                        <UserButton />
+                    )}
 
                     {/* Desktop Navigation */}
                     {role === "seeker" && (
+                        // If seeker & Large screen then show this
                         <div className="hidden md:flex items-center gap-4">
                             {role && (
                                 <div className="px-3 py-1 rounded-full text-sm text-gray-100 bg-white/40 font-medium">

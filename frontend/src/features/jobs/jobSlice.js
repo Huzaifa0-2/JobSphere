@@ -5,7 +5,11 @@ import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 export const fetchJobs = createAsyncThunk(
   "jobs/fetchJobs",
   async (userId) => {
-    const res = await fetch(`http://localhost:5000/jobs/employer/${userId}`);
+    const res = await fetch(`http://localhost:5000/jobs/employer/${userId}`, {
+      headers: {
+        userId
+      }
+    });
     return res.json();
   }
 );
@@ -35,7 +39,8 @@ export const addJob = createAsyncThunk(
     const res = await fetch("http://localhost:5000/jobs", {
       method: "POST",
       headers: {
-        "Content-Type": "application/json"
+        "Content-Type": "application/json",
+        userId: job.postedBy
       },
       body: JSON.stringify(job)
     });
@@ -50,7 +55,8 @@ export const deleteJob = createAsyncThunk(
     await fetch(`http://localhost:5000/jobs/${id}`, {
       method: "DELETE",
       headers: {
-        "Content-Type": "application/json"
+        "Content-Type": "application/json",
+        userId
       },
       body: JSON.stringify({
         userId
@@ -71,7 +77,8 @@ export const updateJob = createAsyncThunk(
     const res = await fetch(`http://localhost:5000/jobs/${id}`, {
       method: "PUT",
       headers: {
-        "Content-Type": "application/json"
+        "Content-Type": "application/json",
+        userId
       },
       body: JSON.stringify({
         ...job,

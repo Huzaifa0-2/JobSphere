@@ -17,6 +17,7 @@ import AIChat from "./pages/AIChat";
 import Notifications from "./components/Notifications";
 import socket from "./socket";
 import AnalyticsDashboard from "./pages/AnalyticsDashboard";
+import AdminDashboard from "./pages/AdminDashboard";
 
 function App() {
   const { user } = useUser();
@@ -34,6 +35,7 @@ function App() {
 
   }, [user]);
 
+  // Fetch USER & its Role
   useEffect(() => {
     if (!user) {
       setLoading(false);
@@ -117,6 +119,7 @@ function App() {
                 {!role && <RoleSelect setRole={setRole} />}
                 {role === "seeker" && <SeekerDashboard />}
                 {role === "employer" && <EmployerDashboard />}
+                {role === "admin" && <AdminDashboard />}
               </Layout>
             </SignedIn>
           </>

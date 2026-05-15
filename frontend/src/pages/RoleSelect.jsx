@@ -11,6 +11,7 @@ function RoleSelect({ setRole }) {
     setLoading(true);
     setSelectedRole(role);
 
+    // Create USER
     const res = await fetch("http://localhost:5000/users", {
       method: "POST",
       headers: {

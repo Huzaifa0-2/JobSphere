@@ -243,7 +243,7 @@ function EmployerDashboard() {
       {showForm && (
         <div className="bg-white rounded-xl shadow-lg border border-gray-100 p-6 animate-in slide-in-from-top duration-300">
           <div className="flex items-center justify-between mb-4">
-            <h3 className="text-xl font-bold text-gray-900">{editId ? "✏️ Edit Job" : "📝 Post a New Job"}</h3>
+            <h3 className="text-xl font-bold text-gray-900">{editId ? "✏️ Edit Job" : "Post a New Job"}</h3>
             <button onClick={() => { setShowForm(false); setEditId(null); setTitle(""); setSalary(""); setLocation(""); setCompany(""); setDescription(""); setRequirements(""); setJobType(""); setExperience(""); }} className="p-2 hover:bg-gray-100 rounded-full transition"><X className="w-5 h-5" /></button>
           </div>
           <form onSubmit={handleSubmit} className="space-y-4">
@@ -264,7 +264,7 @@ function EmployerDashboard() {
 
       {/* Job List */}
       <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-6">
-        <h2 className="text-xl font-bold text-gray-900 mb-6">📋 Your Job Posts</h2>
+        <h2 className="text-xl font-bold text-gray-900 mb-6">Your Job Posts</h2>
         {jobs.length === 0 && (
           <div className="text-center py-12"><Briefcase className="w-16 h-16 text-gray-300 mx-auto mb-4" /><p className="text-gray-500">No jobs posted yet</p><button onClick={() => setShowForm(true)} className="mt-4 text-indigo-600 font-medium">Post your first job →</button></div>
         )}
@@ -284,7 +284,7 @@ function EmployerDashboard() {
       {selectedJobId && (
         <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-6 animate-in slide-in-from-bottom duration-300">
           <div className="flex items-center justify-between mb-6"><h2 className="text-xl font-bold text-gray-900">
-            👥 Applicants</h2>
+            Applicants</h2>
             <button onClick={() => { setSelectedJobId(null); setAiAnalysis(null); }}
               className="p-2 hover:bg-gray-100 rounded-full">
               <X className="w-5 h-5" />

@@ -6,7 +6,7 @@ export const applyJob = createAsyncThunk(
     async ({ userId, jobId, userName, resumeId, resumeUrl }) => {
         const res = await fetch("http://localhost:5000/applications/apply", {
             method: "POST",
-            headers: { "Content-Type": "application/json" },
+            headers: { "Content-Type": "application/json", userId },
             body: JSON.stringify({ userId, jobId, userName, resumeId, resumeUrl })
         });
         const data = await res.json();

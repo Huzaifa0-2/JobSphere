@@ -3,7 +3,7 @@ import { ToastContainer, toast } from 'react-toastify';
 import { useEffect, useState } from "react";
 import { useUser } from "@clerk/clerk-react";
 import { useSelector, useDispatch } from "react-redux";
-import ApplyForm from "../components/ApplyForm";
+// import ApplyForm from "../components/ApplyForm";
 import SearchFilter from "../components/SearchFilter";
 import { useNavigate } from "react-router-dom";
 import {
@@ -154,6 +154,7 @@ function SeekerDashboard() {
         dispatch(fetchSingleJob(jobId));
     };
 
+    // Fetch applied jobs
     useEffect(() => {
         fetch(`http://localhost:5000/applications/user/${user.id}`)
             .then(res => res.json())

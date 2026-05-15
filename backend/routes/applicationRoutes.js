@@ -1,3 +1,5 @@
+const { protect } = require("../middleware/authMiddleware");
+const { allowRoles } = require("../middleware/roleMiddleware");
 const express = require("express");
 const router = express.Router();
 
@@ -19,7 +21,7 @@ router.get("/user/:userId", getApplicationsByUser);
 
 
 
-router.post("/apply", applyJob);
+router.post("/apply", protect, allowRoles("seeker"), applyJob);
 
 router.get("/check", checkApplication);
 

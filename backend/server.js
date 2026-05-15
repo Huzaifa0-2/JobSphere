@@ -60,6 +60,7 @@ app.use("/resume", require("./routes/resumeRoutes"));
 app.use("/notifications", require("./routes/notificationRoutes"));
 app.use("/ai", require("./routes/aiRoutes"));
 app.use("/analytics", require("./routes/analyticsRoutes"));
+app.use("/admin", require("./routes/adminRoutes"));
 
 
 // CREATE HTTP SERVER
