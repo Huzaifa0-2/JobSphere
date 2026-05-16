@@ -1,0 +1,1 @@
+export const API_URL = "https://jobsphere-backend-dvb0.onrender.com";

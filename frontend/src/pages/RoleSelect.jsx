@@ -1,3 +1,4 @@
+import { API_URL } from "../config";
 import { useUser } from "@clerk/clerk-react";
 import { Briefcase, Users, Sparkles, ArrowRight } from "lucide-react";
 import { useState } from "react";
@@ -12,7 +13,7 @@ function RoleSelect({ setRole }) {
     setSelectedRole(role);
 
     // Create USER
-    const res = await fetch("http://localhost:5000/users", {
+    const res = await fetch(`${API_URL}/users`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json"

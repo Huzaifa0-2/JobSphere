@@ -1,3 +1,4 @@
+import { API_URL } from "./config";
 import {
   SignedIn,
   SignedOut,
@@ -42,7 +43,7 @@ function App() {
       return;
     }
 
-    fetch(`http://localhost:5000/users/${user.id}`)
+    fetch(`${API_URL}/users/${user.id}`)
       .then(res => res.json())
       .then(data => {
         if (data) setRole(data.role);

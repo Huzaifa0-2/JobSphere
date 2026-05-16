@@ -1,3 +1,4 @@
+import { API_URL } from "../config";
 import { useEffect, useState } from "react";
 import { useUser } from "@clerk/clerk-react";
 import { 
@@ -18,7 +19,7 @@ function AnalyticsDashboard() {
 
   useEffect(() => {
     if (!user) return;
-    fetch(`http://localhost:5000/analytics/employer/${user.id}`)
+    fetch(`${API_URL}/analytics/employer/${user.id}`)
       .then(res => res.json())
       .then(data => setAnalytics(data));
   }, [user]);

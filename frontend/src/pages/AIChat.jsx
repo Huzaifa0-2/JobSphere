@@ -1,3 +1,4 @@
+import { API_URL } from "../config";
 import { useEffect, useState, useRef } from "react";
 import { useUser } from "@clerk/clerk-react";
 import { Send, Loader2, Bot, User, Sparkles, MessageCircle, ArrowDown } from "lucide-react";
@@ -18,10 +19,10 @@ function AIChat() {
 
         const fetchMessages = async () => {
             try {
-                const res = await fetch(`http://localhost:5000/ai/chathistory/${user.id}`);
+                const res = await fetch(`${API_URL}/ai/chathistory/${user.id}`);
                 const data = await res.json();
 
-                // ✅ Handle both response formats
+                // Handle both response formats
                 if (data.messages) {
                     setMessages(data.messages);
                 } else if (Array.isArray(data)) {
@@ -41,12 +42,12 @@ function AIChat() {
 
         setLoading(true);
 
-        // ✅ Add user message immediately (optimistic update)
+        // Add user message immediately (optimistic update)
         const userMessage = { role: "user", content: message.trim() };
         setMessages(prev => [...prev, userMessage]);
 
         try {
-            const res = await fetch("http://localhost:5000/ai/chat", {
+            const res = await fetch(`${API_URL}/ai/chat`, {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
                 body: JSON.stringify({

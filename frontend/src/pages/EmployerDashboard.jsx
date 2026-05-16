@@ -1,3 +1,4 @@
+import { API_URL } from "../config";
 import AnalyticsDashboard from "./AnalyticsDashboard";
 import { useEffect, useState } from "react";
 import { useNavigate, Link } from "react-router-dom";
@@ -64,7 +65,7 @@ function EmployerDashboard() {
   // for total applications count
   useEffect(() => {
     if (!user) return;
-    fetch(`http://localhost:5000/analytics/employer/${user.id}`)
+    fetch(`${API_URL}/analytics/employer/${user.id}`)
       .then(res => res.json())
       .then(data => setTotalApplications(data.totalApplications));
   }, [user]);
@@ -130,7 +131,7 @@ function EmployerDashboard() {
   const analyzeCandidate = async (applicationId) => {
     setLoadingAI(true);
     try {
-      const res = await fetch("http://localhost:5000/ai/analyze-candidate", {
+      const res = await fetch(`${API_URL}/ai/analyze-candidate`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ applicationId })

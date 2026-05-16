@@ -1,3 +1,4 @@
+import { API_URL } from "../config";
 import { toast, ToastContainer } from "react-toastify";
 import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
@@ -45,7 +46,7 @@ function JobDetails() {
   // Check if already applied
   useEffect(() => {
     if (!userId) return;
-    fetch(`http://localhost:5000/applications/check?userId=${userId}&jobId=${jobId}`)
+    fetch(`${API_URL}/applications/check?userId=${userId}&jobId=${jobId}`)
       .then(res => res.json())
       .then(data => setApplied(data.applied));
   }, [jobId, userId]);
@@ -78,7 +79,7 @@ function JobDetails() {
   const generateQuestions = async () => {
     setLoadingQuestions(true);
     try {
-      const res = await fetch("http://localhost:5000/ai/interview-questions", {
+      const res = await fetch(`${API_URL}/ai/interview-questions`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({

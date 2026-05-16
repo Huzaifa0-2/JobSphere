@@ -1,3 +1,4 @@
+import { API_URL } from "../config";
 import { useEffect, useState } from "react";
 import { useUser } from "@clerk/clerk-react";
 import { 
@@ -30,9 +31,9 @@ function AdminDashboard() {
     setLoading(true);
     
     Promise.all([
-      fetch("http://localhost:5000/admin/stats", { headers: { userId: user.id } }).then(res => res.json()),
-      fetch("http://localhost:5000/admin/users", { headers: { userId: user.id } }).then(res => res.json()),
-      fetch("http://localhost:5000/admin/jobs", { headers: { userId: user.id } }).then(res => res.json())
+      fetch(`${API_URL}/admin/stats`, { headers: { userId: user.id } }).then(res => res.json()),
+      fetch(`${API_URL}/admin/users`, { headers: { userId: user.id } }).then(res => res.json()),
+      fetch(`${API_URL}/admin/jobs`, { headers: { userId: user.id } }).then(res => res.json())
     ])
       .then(([statsData, usersData, jobsData]) => {
         setStats(statsData);
@@ -46,7 +47,7 @@ function AdminDashboard() {
   // DELETE USER
   const deleteUser = async (id) => {
     if (window.confirm("Are you sure you want to delete this user?")) {
-      await fetch(`http://localhost:5000/admin/user/${id}`, {
+      await fetch(`${API_URL}/admin/user/${id}`, {
         headers: { userId: user.id },
         method: "DELETE"
       });
@@ -57,7 +58,7 @@ function AdminDashboard() {
   // DELETE JOB
   const deleteJob = async (id) => {
     if (window.confirm("Are you sure you want to delete this job?")) {
-      await fetch(`http://localhost:5000/admin/job/${id}`, {
+      await fetch(`${API_URL}/admin/job/${id}`, {
         headers: { userId: user.id },
         method: "DELETE"
       });

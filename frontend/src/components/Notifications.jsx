@@ -13,7 +13,7 @@ function Notifications() {
     if (!user) return;
 
     setLoading(true);
-    fetch(`http://localhost:5000/notifications/${user.id}`)
+    fetch(`${API_URL}/notifications/${user.id}`)
       .then(res => res.json())
       .then(data => {
         setNotifications(data);
@@ -24,7 +24,7 @@ function Notifications() {
 
   // Mark as read
   const markRead = async (id) => {
-    await fetch(`http://localhost:5000/notifications/${id}/read`, { method: "PUT" });
+    await fetch(`${API_URL}/notifications/${id}/read`, { method: "PUT" });
     setNotifications(prev =>
       prev.map(n => (n._id === id ? { ...n, isRead: true } : n))
     );
@@ -34,7 +34,7 @@ function Notifications() {
   const markAllRead = async () => {
     const unreadIds = notifications.filter(n => !n.isRead).map(n => n._id);
     for (const id of unreadIds) {
-      await fetch(`http://localhost:5000/notifications/${id}/read`, { method: "PUT" });
+      await fetch(`${API_URL}/notifications/${id}/read`, { method: "PUT" });
     }
     setNotifications(prev => prev.map(n => ({ ...n, isRead: true })));
   };

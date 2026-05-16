@@ -1,3 +1,4 @@
+import { API_URL } from "../config";
 import socket from "../socket";
 import { SignOutButton, UserButton, useUser } from "@clerk/clerk-react";
 import { useEffect, useState } from "react";
@@ -33,7 +34,7 @@ function Layout({ children, role }) {
         if (!user) return;
 
         fetch(
-            `http://localhost:5000/notifications/${user.id}`
+            `${API_URL}/notifications/${user.id}`
         )
             .then(res => res.json())
             .then(data => setNotifications(data));

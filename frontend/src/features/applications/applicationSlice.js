@@ -1,10 +1,12 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
+import { API_URL } from "../../config";
+
 
 // Apply Job
 export const applyJob = createAsyncThunk(
     "applications/applyJob",
     async ({ userId, jobId, userName, resumeId, resumeUrl }) => {
-        const res = await fetch("http://localhost:5000/applications/apply", {
+        const res = await fetch(`${API_URL}/applications/apply`, {
             method: "POST",
             headers: { "Content-Type": "application/json", userId },
             body: JSON.stringify({ userId, jobId, userName, resumeId, resumeUrl })
@@ -17,31 +19,13 @@ export const applyJob = createAsyncThunk(
     }
 )
 
-// export const applyJob = createAsyncThunk(
-//   "applications/applyJob",
-//   async ({ jobId, file, userId }) => {
-//     const formData = new FormData();
-//     formData.append("resume", file);
-//     formData.append("jobId", jobId);
-//     formData.append("userId", userId);
-
-//     const res = await fetch("http://localhost:5000/applications/apply", {
-//       method: "POST",
-//       body: formData
-//     });
-
-//     const data = await res.json();
-//     return data;
-//   }
-// );
-
 // FETCH applications seeker applied to
 export const fetchUserApplications = createAsyncThunk(
   "applications/fetchUserApplications",
   async (userId) => {
     if (!userId) return;
 
-    const res = await fetch(`http://localhost:5000/applications/user/${userId}`);
+    const res = await fetch(`${API_URL}/applications/user/${userId}`);
 
     return res.json();
   }
@@ -51,7 +35,7 @@ export const fetchUserApplications = createAsyncThunk(
 export const fetchJobApplications = createAsyncThunk(
   "applications/fetchJobApplications",
   async (jobId) => {
-    const res = await fetch(`http://localhost:5000/applications/job/${jobId}`);
+    const res = await fetch(`${API_URL}/applications/job/${jobId}`);
     const data = await res.json();
     return data;
   }
@@ -61,7 +45,7 @@ export const fetchJobApplications = createAsyncThunk(
 export const updateApplicationStatus = createAsyncThunk(
   "applications/updateStatus",
   async ({ id, jobTitle, status }) => {
-    const res = await fetch(`http://localhost:5000/applications/${id}`, {
+    const res = await fetch(`${API_URL}/applications/${id}`, {
       method: "PUT",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ jobTitle, status })

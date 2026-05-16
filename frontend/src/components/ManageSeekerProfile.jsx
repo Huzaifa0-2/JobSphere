@@ -44,17 +44,6 @@ function ManageSeekerProfile() {
         }));
     }
 
-    // const handleUpdateProfile = (e) => {
-    //     e.preventDefault();
-    //     dispatch(updateSeekerProfile({
-    //         userId: user.id,
-    //         firstname,
-    //         lastName,
-    //         email,
-    //         phone
-    //     }));
-    // }
-
     return (
         <div>
             <SeekerProfile />

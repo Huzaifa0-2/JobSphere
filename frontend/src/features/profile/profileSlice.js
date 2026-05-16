@@ -1,10 +1,11 @@
+import { API_URL } from "../../config";
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 
 // FETCH SEEKER PROFILE
 export const fetchSeekerProfile = createAsyncThunk(
     "profile/fetchSeekerProfile",
     async (userId) => {
-        const res = await fetch(`http://localhost:5000/profile/${userId}`);
+        const res = await fetch(`${API_URL}/profile/${userId}`);
         return res.json();
     }
 );
@@ -13,7 +14,7 @@ export const fetchSeekerProfile = createAsyncThunk(
 export const createUpdateSeekerProfile = createAsyncThunk(
     "profile/createUpdateSeekerProfile",
     async ({ userId, profileData }) => {
-       const res = await fetch(`http://localhost:5000/profile/${userId}`, {
+       const res = await fetch(`${API_URL}/profile/${userId}`, {
             method: "POST",
             headers: {
                 "Content-Type": "application/json"
@@ -32,7 +33,7 @@ export const createUpdateSeekerProfile = createAsyncThunk(
 export const uploadResume = createAsyncThunk(
     "profile/uploadResume",
     async (formData) => {
-        const res = await fetch("http://localhost:5000/resume/upload", {
+        const res = await fetch(`${API_URL}/resume/upload`, {
             method: "POST",
             body: formData
         });
@@ -47,28 +48,13 @@ export const uploadResume = createAsyncThunk(
 export const getUserResume = createAsyncThunk(
     "profile/getUserResume",
     async (userId) => {
-        const res = await fetch(`http://localhost:5000/resume/${userId}`);
+        const res = await fetch(`${API_URL}/resume/${userId}`);
         if (!res.ok) {
             throw new Error("Failed to fetch resume");
         }
         return res.json();
     }
 )
-
-// UPDATE SEEKER PROFILE
-// export const updateSeekerProfile = createAsyncThunk(
-//     "profile/updateSeekerProfile",
-//     async ({ userId, profileData }) => {
-//         const res = await fetch(`http://localhost:5000/profile/${userId}`, {
-//             method: "PUT",
-//             headers: {
-//                 "Content-Type": "application/json"
-//             },
-//             body: JSON.stringify(profileData)
-//         });
-//         return res.json();
-//     }
-// );
 
 // SLICE
 const profileSlice = createSlice({

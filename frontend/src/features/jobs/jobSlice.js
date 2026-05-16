@@ -1,3 +1,4 @@
+import { API_URL } from "../../config";
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 // import { useUser } from "@clerk/clerk-react";
 
@@ -5,7 +6,7 @@ import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 export const fetchJobs = createAsyncThunk(
   "jobs/fetchJobs",
   async (userId) => {
-    const res = await fetch(`http://localhost:5000/jobs/employer/${userId}`, {
+    const res = await fetch(`${API_URL}/jobs/employer/${userId}`, {
       headers: {
         userId
       }
@@ -18,7 +19,7 @@ export const fetchJobs = createAsyncThunk(
 export const fetchSingleJob = createAsyncThunk(
   "jobs/fetchSingleJob",
   async (id) => {
-    const res = await fetch(`http://localhost:5000/jobs/${id}`);
+    const res = await fetch(`${API_URL}/jobs/${id}`);
     return await res.json();
   }
 );
@@ -27,7 +28,7 @@ export const fetchSingleJob = createAsyncThunk(
 export const fetchAllJobs = createAsyncThunk(
   "jobs/fetchAllJobs",
   async () => {
-    const res = await fetch("http://localhost:5000/jobs");
+    const res = await fetch(`${API_URL}/jobs`);
     return res.json();
   }
 );
@@ -36,7 +37,7 @@ export const fetchAllJobs = createAsyncThunk(
 export const addJob = createAsyncThunk(
   "jobs/addJob",
   async (job) => {
-    const res = await fetch("http://localhost:5000/jobs", {
+    const res = await fetch(`${API_URL}/jobs`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -52,7 +53,7 @@ export const addJob = createAsyncThunk(
 export const deleteJob = createAsyncThunk(
   "jobs/deleteJob",
   async ({ id, userId }) => {
-    await fetch(`http://localhost:5000/jobs/${id}`, {
+    await fetch(`${API_URL}/jobs/${id}`, {
       method: "DELETE",
       headers: {
         "Content-Type": "application/json",
@@ -74,7 +75,7 @@ export const updateJob = createAsyncThunk(
     // const user = useUser();
     // const userId = user.id;
 
-    const res = await fetch(`http://localhost:5000/jobs/${id}`, {
+    const res = await fetch(`${API_URL}/jobs/${id}`, {
       method: "PUT",
       headers: {
         "Content-Type": "application/json",
@@ -95,7 +96,7 @@ export const searchJobs = createAsyncThunk(
   async (params) => {
     const query = new URLSearchParams(params).toString();
 
-    const res = await fetch(`http://localhost:5000/jobs/search?${query}`);
+    const res = await fetch(`${API_URL}/jobs/search?${query}`);
     return await res.json();
   }
 );

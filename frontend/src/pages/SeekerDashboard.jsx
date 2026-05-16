@@ -1,3 +1,4 @@
+import { API_URL } from "../config";
 import socket from "../socket";
 import { ToastContainer, toast } from 'react-toastify';
 import { useEffect, useState } from "react";
@@ -109,7 +110,6 @@ function SeekerDashboard() {
         if (!userId) return;
         dispatch(fetchUserApplications(userId));
         setShowApplications(true);
-        // setShowStats(false);
     };
 
     useEffect(() => {
@@ -139,7 +139,7 @@ function SeekerDashboard() {
     const getAISuggestions = async () => {
         setLoadingAI(true);
         setShowPopup(true);
-        const res = await fetch("http://localhost:5000/ai/match", {
+        const res = await fetch(`${API_URL}/ai/match`, {
             method: "POST",
             headers: { "Content-Type": "application/json" },
             body: JSON.stringify({ userId: user.id })
@@ -156,7 +156,7 @@ function SeekerDashboard() {
 
     // Fetch applied jobs
     useEffect(() => {
-        fetch(`http://localhost:5000/applications/user/${user.id}`)
+        fetch(`${API_URL}/applications/user/${user.id}`)
             .then(res => res.json())
             .then(data => {
                 const ids = data.map(app => app.jobId?._id);
