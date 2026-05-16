@@ -304,38 +304,38 @@ function SeekerDashboard() {
                 </div>
             </div>
 
-{/* Resume Upload Card */}
-<div className="bg-gradient-to-r from-blue-50 to-indigo-50 rounded-xl p-4 sm:p-5 border border-blue-100">
-    <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
-        
-        {/* Left Side - Icon & Text */}
-        <div className="flex items-center gap-3">
-            <div className="w-10 h-10 bg-blue-100 rounded-full flex items-center justify-center flex-shrink-0">
-                <FileText className="w-5 h-5 text-blue-600" />
+            {/* Resume Upload Card */}
+            <div className="bg-gradient-to-r from-blue-50 to-indigo-50 rounded-xl p-4 sm:p-5 border border-blue-100">
+                <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+
+                    {/* Left Side - Icon & Text */}
+                    <div className="flex items-center gap-3">
+                        <div className="w-10 h-10 bg-blue-100 rounded-full flex items-center justify-center flex-shrink-0">
+                            <FileText className="w-5 h-5 text-blue-600" />
+                        </div>
+                        <div>
+                            <h3 className="font-semibold text-gray-900 text-sm sm:text-base">Upload Your Resume</h3>
+                            <p className="text-xs sm:text-sm text-gray-500">Get matched with relevant jobs instantly</p>
+                        </div>
+                    </div>
+
+                    {/* Right Side - File Input & Button */}
+                    <div className="flex flex-col xs:flex-row gap-3 w-full sm:w-auto">
+                        <input
+                            type="file"
+                            onChange={(e) => setFile(e.target.files[0])}
+                            className="flex-1 text-xs sm:text-sm px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                            accept=".pdf"
+                        />
+                        <button
+                            onClick={addResume}
+                            className="px-4 sm:px-5 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition text-sm font-medium whitespace-nowrap"
+                        >
+                            Upload
+                        </button>
+                    </div>
+                </div>
             </div>
-            <div>
-                <h3 className="font-semibold text-gray-900 text-sm sm:text-base">Upload Your Resume</h3>
-                <p className="text-xs sm:text-sm text-gray-500">Get matched with relevant jobs instantly</p>
-            </div>
-        </div>
-        
-        {/* Right Side - File Input & Button */}
-        <div className="flex flex-col xs:flex-row gap-3 w-full sm:w-auto">
-            <input 
-                type="file" 
-                onChange={(e) => setFile(e.target.files[0])} 
-                className="flex-1 text-xs sm:text-sm px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
-                accept=".pdf" 
-            />
-            <button 
-                onClick={addResume} 
-                className="px-4 sm:px-5 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition text-sm font-medium whitespace-nowrap"
-            >
-                Upload
-            </button>
-        </div>
-    </div>
-</div>
 
             {/* Search Section */}
             <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-6">
@@ -385,7 +385,9 @@ function SeekerDashboard() {
                     <div className="bg-white rounded-2xl max-w-3xl w-full max-h-[80vh] overflow-y-auto">
                         <div className="sticky top-0 bg-white border-b p-4 flex justify-between items-center">
                             <h2 className="text-xl font-bold">My Applications</h2>
-                            <button onClick={() => setShowApplications(false)} className="p-1 hover:bg-gray-100 rounded"><X className="w-5 h-5" /></button>
+                            <button onClick={() => setShowApplications(false)} className="p-1 hover:bg-gray-100 rounded">
+                                <X className="w-5 h-5" />
+                            </button>
                         </div>
                         <div className="p-5 space-y-4">
                             {applications.map(app => (

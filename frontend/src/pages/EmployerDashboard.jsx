@@ -283,65 +283,84 @@ function EmployerDashboard() {
 
       {/* Applications Section */}
       {selectedJobId && (
-        <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-6 animate-in slide-in-from-bottom duration-300">
-          <div className="flex items-center justify-between mb-6"><h2 className="text-xl font-bold text-gray-900">
-            Applicants</h2>
-            <button onClick={() => { setSelectedJobId(null); setAiAnalysis(null); }}
-              className="p-2 hover:bg-gray-100 rounded-full">
-              <X className="w-5 h-5" />
-            </button>
-          </div>
-          {applications.length === 0 && (<div className="text-center py-12"><Users className="w-16 h-16 text-gray-300 mx-auto mb-4" /><p className="text-gray-500">No applicants yet</p></div>)}
-          <div className="space-y-4">
-            {applications.map(app => (
-              <div key={app._id} className="border border-gray-100 rounded-lg p-4 hover:shadow-md transition">
-                <div className="flex flex-col lg:flex-row lg:items-start justify-between gap-4">
-                  <div className="flex-1"><div className="flex items-center gap-3 mb-2"><div className="w-10 h-10 bg-gradient-to-r from-blue-100 to-indigo-100 rounded-full flex items-center justify-center"><Users className="w-5 h-5 text-indigo-600" /></div><div><p className="font-semibold text-gray-900">{app.userName || app.userId}</p><p className="text-sm text-gray-500">Applied for: {app.jobId?.title}</p></div></div>{app.resumeUrl && (<a href={app.resumeUrl} target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-1 text-sm text-indigo-600 hover:underline">
-                    <FileText className="w-4 h-4" /> View Resume</a>)}
-                  </div>
-                  <div className="flex flex-col items-end gap-2">
-                    <div className={`flex items-center gap-1 px-3 py-1 rounded-full text-sm font-medium ${getStatusColor(app.status)}`}>{getStatusIcon(app.status)}<span className="capitalize">{app.status || "Pending"}</span></div>
-                    <div className="flex gap-2">
-                      <button onClick={() => updateStatus(app._id, app.jobId?.title, "accepted")} className="flex items-center gap-1 px-3 py-1.5 bg-green-50 text-green-600 rounded-lg hover:bg-green-100">
-                        <CheckCircle className="w-4 h-4" />Accept
-                      </button>
-                      <button onClick={() => updateStatus(app._id, app.jobId?.title, "rejected")} className="flex items-center gap-1 px-3 py-1.5 bg-red-50 text-red-600 rounded-lg hover:bg-red-100">
-                        <XCircle className="w-4 h-4" />Reject
-                      </button>
-                    </div>
-                    <div className="grid grid-cols-1 md:grid-cols-2 w-full gap-3 mt-2">
-                      <Link to={`/profile/${app.userId}`}>
-                        <button className="px-4 py-2 w-full bg-slate-700 text-white rounded-lg text-sm hover:bg-slate-800 transition"
-                          onClick={() => updateStatus(app._id, app.jobId?.title, "reviewing")}>
-                          View Profile
-                        </button>
-                      </Link>
-                      <button
-                        onClick={() => analyzeCandidate(app._id)}
-                        disabled={loadingAI}
-                        className="px-4 py-2 bg-gradient-to-r from-purple-600 to-indigo-600 text-white rounded-lg text-sm hover:shadow-lg transition flex justify-center items-center gap-2">
-                        {loadingAI ?
-                          <Loader2 className="w-4 h-4 animate-spin" /> : <Sparkles className="w-4 h-4" />} AI Analyze
-                      </button>
-                    </div>
-                  </div>
-                </div>
-                {aiAnalysis && (
-                  <div className="mt-4 p-4 bg-gradient-to-r from-gray-50 to-blue-50 rounded-lg border border-gray-200 animate-in fade-in duration-300">
-                    <div className="flex items-center gap-2 mb-3">
-                      <Sparkles className="w-5 h-5 text-purple-600" />
-                      <h4 className="font-semibold text-gray-900">AI Analysis Result</h4>
-                    </div>
-                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                      <div><p className="text-sm text-gray-600">Match Score</p><p className="text-2xl font-bold text-green-600">{aiAnalysis.matchScore}%</p></div>
-                      <div><p className="text-sm text-gray-600">Recommendation</p><p className="text-sm font-medium">{aiAnalysis.recommendation}</p></div>
-                      <div><p className="text-sm font-semibold text-gray-700 mb-1">✓ Strengths</p><ul className="list-disc list-inside text-sm text-gray-600 space-y-1">{aiAnalysis.strengths?.map((s, i) => <li key={i}>{s}</li>)}</ul></div>
-                      <div><p className="text-sm font-semibold text-gray-700 mb-1">⚠ Missing Skills</p><ul className="list-disc list-inside text-sm text-gray-600 space-y-1">{aiAnalysis.missingSkills?.map((s, i) => <li key={i}>{s}</li>)}</ul></div>
-                    </div>
-                  </div>
-                )}
+        <div className="fixed inset-0 bg-black/50 backdrop-blur-sm flex items-center justify-center z-50 p-4">
+          <div className="bg-white rounded-2xl max-w-3xl w-full max-h-[80vh] overflow-y-auto">
+
+            <div className="sticky top-0 bg-white border-b p-4 flex justify-between items-center">
+              <h2 className="text-xl font-bold">Applicants</h2>
+              <button onClick={() => { setSelectedJobId(null); setAiAnalysis(null); }}
+                className="p-2 hover:bg-gray-100 rounded-full">
+                <X className="w-5 h-5" />
+              </button>
+            </div>
+            {/* </div> */}
+            {applications.length === 0 && (
+              <div className="text-center py-12">
+                <Users className="w-16 h-16 text-gray-300 mx-auto mb-4" />
+                <p className="text-gray-500">No applicants yet</p>
               </div>
-            ))}
+            )}
+            <div className="space-y-4">
+              {applications.map(app => (
+                <div key={app._id} className="border border-gray-100 rounded-lg p-4 hover:shadow-md transition">
+                  <div className="flex flex-col lg:flex-row lg:items-start justify-between gap-4">
+                    <div className="flex-1"><div className="flex items-center gap-3 mb-2">
+                      <div className="w-10 h-10 bg-gradient-to-r from-blue-100 to-indigo-100 rounded-full flex items-center justify-center">
+                        <Users className="w-5 h-5 text-indigo-600" />
+                      </div>
+                      <div>
+                        <p className="font-semibold text-gray-900">{app.userName || app.userId}</p>
+                        <p className="text-sm text-gray-500">Applied for: {app.jobId?.title}
+                        </p>
+                      </div>
+                    </div>
+                      {app.resumeUrl && (<a href={app.resumeUrl} target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-1 text-sm text-indigo-600 hover:underline">
+                        <FileText className="w-4 h-4" /> View Resume</a>)}
+                    </div>
+                    <div className="flex flex-col items-end gap-2">
+                      <div className={`flex items-center gap-1 px-3 py-1 rounded-full text-sm font-medium ${getStatusColor(app.status)}`}>{getStatusIcon(app.status)}<span className="capitalize">{app.status || "Pending"}</span></div>
+                      <div className="flex gap-2">
+                        <button onClick={() => updateStatus(app._id, app.jobId?.title, "accepted")} className="flex items-center gap-1 px-3 py-1.5 bg-green-50 text-green-600 rounded-lg hover:bg-green-100">
+                          <CheckCircle className="w-4 h-4" />Accept
+                        </button>
+                        <button onClick={() => updateStatus(app._id, app.jobId?.title, "rejected")} className="flex items-center gap-1 px-3 py-1.5 bg-red-50 text-red-600 rounded-lg hover:bg-red-100">
+                          <XCircle className="w-4 h-4" />Reject
+                        </button>
+                      </div>
+                      <div className="grid grid-cols-1 md:grid-cols-2 w-full gap-3 mt-2">
+                        <Link to={`/profile/${app.userId}`}>
+                          <button className="px-4 py-2 w-full bg-slate-700 text-white rounded-lg text-sm hover:bg-slate-800 transition"
+                            onClick={() => updateStatus(app._id, app.jobId?.title, "reviewing")}>
+                            View Profile
+                          </button>
+                        </Link>
+                        <button
+                          onClick={() => analyzeCandidate(app._id)}
+                          disabled={loadingAI}
+                          className="px-4 py-2 bg-gradient-to-r from-purple-600 to-indigo-600 text-white rounded-lg text-sm hover:shadow-lg transition flex justify-center items-center gap-2">
+                          {loadingAI ?
+                            <Loader2 className="w-4 h-4 animate-spin" /> : <Sparkles className="w-4 h-4" />} AI Analyze
+                        </button>
+                      </div>
+                    </div>
+                  </div>
+                  {aiAnalysis && (
+                    <div className="mt-4 p-4 bg-gradient-to-r from-gray-50 to-blue-50 rounded-lg border border-gray-200 animate-in fade-in duration-300">
+                      <div className="flex items-center gap-2 mb-3">
+                        <Sparkles className="w-5 h-5 text-purple-600" />
+                        <h4 className="font-semibold text-gray-900">AI Analysis Result</h4>
+                      </div>
+                      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <div><p className="text-sm text-gray-600">Match Score</p><p className="text-2xl font-bold text-green-600">{aiAnalysis.matchScore}%</p></div>
+                        <div><p className="text-sm text-gray-600">Recommendation</p><p className="text-sm font-medium">{aiAnalysis.recommendation}</p></div>
+                        <div><p className="text-sm font-semibold text-gray-700 mb-1">✓ Strengths</p><ul className="list-disc list-inside text-sm text-gray-600 space-y-1">{aiAnalysis.strengths?.map((s, i) => <li key={i}>{s}</li>)}</ul></div>
+                        <div><p className="text-sm font-semibold text-gray-700 mb-1">⚠ Missing Skills</p><ul className="list-disc list-inside text-sm text-gray-600 space-y-1">{aiAnalysis.missingSkills?.map((s, i) => <li key={i}>{s}</li>)}</ul></div>
+                      </div>
+                    </div>
+                  )}
+                </div>
+              ))}
+            </div>
           </div>
         </div>
       )}
