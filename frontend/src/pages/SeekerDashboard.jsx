@@ -383,7 +383,8 @@ function SeekerDashboard() {
                                                 <span className="flex items-center gap-1"><MapPin className="w-3 h-3" /> {app.jobId?.location}</span>
                                                 <span className="flex items-center gap-1"><DollarSign className="w-3 h-3" /> ${app.jobId?.salary?.toLocaleString()}/year</span>
                                             </div>
-                                            {app.resumeUrl && <a href={app.resumeUrl} target="_blank" className="text-sm text-blue-600 hover:underline mt-2 inline-block">📄 View Resume</a>}
+                                            {app.resumeUrl && <a href={app.resumeUrl} target="_blank" rel="noopener noreferrer"
+                                                className="text-sm text-blue-600 hover:underline mt-2 inline-block">📄 View Resume</a>}
                                         </div>
                                         <div className={`flex items-center gap-1 px-3 py-1 rounded-full text-sm font-medium ${getStatusColor(app.status)}`}>
                                             {getStatusIcon(app.status)} {app.status || "Pending"}

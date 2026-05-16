@@ -12,7 +12,8 @@
 
 const multer = require("multer");
 
-const storage = multer.memoryStorage(); // 🔥 memory (important)
+// store in memory of server (NOT disk)
+const storage = multer.memoryStorage(); // memory (important)
 
 const upload = multer({ storage });
 
