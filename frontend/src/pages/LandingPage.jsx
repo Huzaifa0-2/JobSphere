@@ -98,7 +98,7 @@ export default function JobSphereLandingPage() {
         <div className="absolute inset-0 z-0">
           <div className="absolute inset-0 bg-gradient-to-r from-black/70 to-black/50 z-10"></div>
           <img
-            // src="https://images.unsplash.com/photo-1521737711867-e3b97375f902?q=80&w=2070&auto=format&fit=crop"
+            // src="https://images.unsplash.com/photo-1730644824079-64b92172c120?q=80&w=1025&auto=format&fit=crop"
             src="https://images.unsplash.com/photo-1521737711867-e3b97375f902?q=80&w=2070&auto=format&fit=crop"
             alt="Office collaboration"
             className="w-full h-full object-cover"
@@ -109,21 +109,6 @@ export default function JobSphereLandingPage() {
       <div className="relative z-10 mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
         {/* Navbar */}
         <>
-          {/* <nav className={`
-        fixed ${navbarTop} left-1/2 -translate-x-1/2 z-50 
-        flex items-center justify-between 
-        w-[95%] sm:w-[90%] md:w-auto md:min-w-[700px] lg:min-w-[900px]
-        px-3 sm:px-4 md:px-6 
-        py-2 sm:py-3 md:py-4 
-        mt-4 sm:mt-6 md:mt-8
-        rounded-xl sm:rounded-2xl md:rounded-3xl 
-        transition-all duration-500 
-        ${scrolled 
-          ? "bg-slate-900/80 backdrop-blur-md border border-slate-700/50" 
-          : "bg-transparent"
-        }
-      `}> */}
-
           <nav className={`fixed ${navbarTop} left-1/2 -translate-x-1/2 z-50 flex items-center justify-between w-[95%]
                           px-4 md:px-6 py-3 md:py-4 mt-6 md:mt-8 rounded-2xl md:rounded-3xl transition-all duration-500 
                           ${scrolled ? "bg-slate-900/80 backdrop-blur-md" : "bg-transparent"} `}>
@@ -239,25 +224,6 @@ export default function JobSphereLandingPage() {
             </p>
 
             {/* Search */}
-            {/* <div className={`absolute left-9 md:left-0 ${searchChartTop} duration-700 mt-6 md:mt-16 rounded-3xl border border-white/20 bg-white/40 p-4 shadow-2xl backdrop-blur-xl`}>
-              <div className="grid gap-4 md:grid-cols-3">
-                <input
-                  type="text"
-                  placeholder="Job title"
-                  className="rounded-2xl border border-white/20 bg-white/60 px-4 py-3 outline-none backdrop-blur-md"
-                />
-
-                <input
-                  type="text"
-                  placeholder="Location"
-                  className="rounded-2xl border border-white/20 bg-white/60 px-4 py-3 outline-none backdrop-blur-md"
-                />
-
-                <button className="rounded-2xl bg-gradient-to-r from-blue-500 to-indigo-600 px-6 py-3 font-semibold text-white shadow-lg transition hover:scale-[1.02]">
-                  Search Jobs
-                </button>
-              </div>
-            </div> */}
             <div className={`absolute left-9 md:left-0 ${searchChartTop} duration-700 mt-6 md:mt-16 rounded-3xl border border-white/20 bg-white/40 p-4 shadow-2xl backdrop-blur-xl`}>
               <div className="md:w-96">
                 {!isSignedIn && (
