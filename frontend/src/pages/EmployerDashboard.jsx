@@ -267,14 +267,40 @@ function EmployerDashboard() {
       <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-6">
         <h2 className="text-xl font-bold text-gray-900 mb-6">Your Job Posts</h2>
         {jobs.length === 0 && (
-          <div className="text-center py-12"><Briefcase className="w-16 h-16 text-gray-300 mx-auto mb-4" /><p className="text-gray-500">No jobs posted yet</p><button onClick={() => setShowForm(true)} className="mt-4 text-indigo-600 font-medium">Post your first job →</button></div>
+          <div className="text-center py-12">
+            <Briefcase className="w-16 h-16 text-gray-300 mx-auto mb-4" />
+            <p className="text-gray-500">No jobs posted yet</p>
+            <button onClick={() => setShowForm(true)} className="mt-4 text-indigo-600 font-medium">Post your first job →</button>
+          </div>
         )}
         <div className="space-y-4">
           {jobs.map(job => (
             <div key={job._id} className="border border-gray-100 rounded-xl p-4 hover:shadow-md hover:border-indigo-200 transition-all">
               <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
-                <div className="flex-1"><h3 className="font-semibold text-lg text-gray-900">{job.title}</h3><p className="text-gray-500 text-sm">{job.company}</p><div className="flex flex-wrap gap-4 mt-2 text-sm text-gray-500"><div className="flex items-center gap-1"><MapPin className="w-4 h-4" />{job.location}</div><div className="flex items-center gap-1"><DollarSign className="w-4 h-4" />${job.salary?.toLocaleString()}/year</div></div></div>
-                <div className="flex flex-wrap gap-2"><button onClick={() => fetchApplications(job._id)} className="flex items-center gap-1 px-3 py-1.5 bg-blue-50 text-blue-600 rounded-lg hover:bg-blue-100 transition"><Eye className="w-4 h-4" />Applicants</button><button onClick={() => { setEditId(job._id); setTitle(job.title); setSalary(job.salary.toString()); setLocation(job.location); setCompany(job.company); setDescription(job.description); setRequirements(job.requirements); setJobType(job.jobType); setExperience(job.experience); setShowForm(true); }} className="flex items-center gap-1 px-3 py-1.5 bg-yellow-50 text-yellow-600 rounded-lg hover:bg-yellow-100 transition"><Edit className="w-4 h-4" />Edit</button><button onClick={() => handleDelete(job._id)} className="flex items-center gap-1 px-3 py-1.5 bg-red-50 text-red-600 rounded-lg hover:bg-red-100 transition"><Trash2 className="w-4 h-4" />Delete</button></div>
+                <div className="flex-1">
+                  <h3 className="font-semibold text-lg text-gray-900">{job.title}</h3>
+                  <p className="text-gray-500 text-sm">{job.company}
+                  </p><div className="flex flex-wrap gap-4 mt-2 text-sm text-gray-500">
+                    <div className="flex items-center gap-1">
+                      <MapPin className="w-4 h-4" />{job.location}
+                    </div>
+                    <div className="flex items-center gap-1">
+                      <DollarSign className="w-4 h-4" />${job.salary?.toLocaleString()}/year
+                    </div>
+                  </div>
+                </div>
+                <div className="flex flex-wrap gap-2">
+                  <button onClick={() => fetchApplications(job._id)} className="flex items-center gap-1 px-3 py-1.5 bg-blue-50 text-blue-600 rounded-lg hover:bg-blue-100 transition">
+                    <Eye className="w-4 h-4" />Applicants
+                  </button>
+                  <button onClick={() => { setEditId(job._id); setTitle(job.title); setSalary(job.salary.toString()); setLocation(job.location); setCompany(job.company); setDescription(job.description); setRequirements(job.requirements); setJobType(job.jobType); setExperience(job.experience); setShowForm(true); }}
+                    className="flex items-center gap-1 px-3 py-1.5 bg-yellow-50 text-yellow-600 rounded-lg hover:bg-yellow-100 transition">
+                    <Edit className="w-4 h-4" />Edit
+                  </button>
+                  <button onClick={() => handleDelete(job._id)} className="flex items-center gap-1 px-3 py-1.5 bg-red-50 text-red-600 rounded-lg hover:bg-red-100 transition">
+                    <Trash2 className="w-4 h-4" />Delete
+                  </button>
+                </div>
               </div>
             </div>
           ))}
@@ -285,7 +311,6 @@ function EmployerDashboard() {
       {selectedJobId && (
         <div className="fixed inset-0 bg-black/50 backdrop-blur-sm flex items-center justify-center z-50 p-4">
           <div className="bg-white rounded-2xl max-w-3xl w-full max-h-[80vh] overflow-y-auto">
-
             <div className="sticky top-0 bg-white border-b p-4 flex justify-between items-center">
               <h2 className="text-xl font-bold">Applicants</h2>
               <button onClick={() => { setSelectedJobId(null); setAiAnalysis(null); }}
@@ -293,7 +318,6 @@ function EmployerDashboard() {
                 <X className="w-5 h-5" />
               </button>
             </div>
-            {/* </div> */}
             {applications.length === 0 && (
               <div className="text-center py-12">
                 <Users className="w-16 h-16 text-gray-300 mx-auto mb-4" />
