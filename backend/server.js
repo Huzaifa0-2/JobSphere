@@ -15,7 +15,7 @@ const app = express();
 app.use(cors({
   origin: [
     "http://localhost:5173",
-    "https://jobsphere-pi.vercel.app/",
+    "https://jobsphere-pi.vercel.app",
   ],
   credentials: true
 }));
@@ -40,8 +40,12 @@ const server = http.createServer(app);
 // SOCKET.IO SERVER
 const io = new Server(server, {
   cors: {
-    origin: "http://localhost:5173",
-    methods: ["GET", "POST"]
+    origin: [
+      "http://localhost:5173",
+      "https://jobsphere-pi.vercel.app"
+    ],
+    methods: ["GET", "POST"],
+    credentials: true
   }
 });
 
