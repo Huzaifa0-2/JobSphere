@@ -1,3 +1,4 @@
+import { API_URL } from "../config";
 import { useEffect, useState } from "react";
 import { useUser } from "@clerk/clerk-react";
 import { Bell, CheckCircle, Circle, Eye, Trash2, Clock, Briefcase, Users, Star } from "lucide-react";
