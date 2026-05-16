@@ -1,6 +1,6 @@
 import { useUser, SignInButton, SignUpButton } from "@clerk/clerk-react";
 import { useEffect, useState } from "react";
-import { Menu, X } from "lucide-react";
+import { Menu, X, Sparkles } from "lucide-react";
 
 export default function JobSphereLandingPage() {
 
@@ -99,7 +99,7 @@ export default function JobSphereLandingPage() {
           <div className="absolute inset-0 bg-gradient-to-r from-black/70 to-black/50 z-10"></div>
           <img
             // src="https://images.unsplash.com/photo-1521737711867-e3b97375f902?q=80&w=2070&auto=format&fit=crop"
-            src="https://images.unsplash.com/photo-1730644824079-64b92172c120?q=80&w=1025&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
+            src="https://images.unsplash.com/photo-1521737711867-e3b97375f902?q=80&w=2070&auto=format&fit=crop"
             alt="Office collaboration"
             className="w-full h-full object-cover"
           />
@@ -127,8 +127,6 @@ export default function JobSphereLandingPage() {
           <nav className={`fixed ${navbarTop} left-1/2 -translate-x-1/2 z-50 flex items-center justify-between w-[95%]
                           px-4 md:px-6 py-3 md:py-4 mt-6 md:mt-8 rounded-2xl md:rounded-3xl transition-all duration-500 
                           ${scrolled ? "bg-slate-900/80 backdrop-blur-md" : "bg-transparent"} `}>
-
-
 
             {/* Logo */}
             <div className="flex items-center gap-2 sm:gap-3">
@@ -221,21 +219,27 @@ export default function JobSphereLandingPage() {
         <section className="grid min-h-[90vh] items-center gap-12 py-16 mt-12 md:mt-28 lg:grid-cols-2">
           {/* Left */}
           <div>
-            <div className="animate-in slide-in-from-left-100 duration-500 mb-10 inline-flex items-center gap-2 rounded-full border border-white/20 bg-white/40 px-4 py-2 text-sm font-medium text-gray-300 backdrop-blur-lg shadow-md">
-              The Smartest AI Job Platform
+            <div className="animate-in slide-in-from-left-50 duration-600 inline-flex items-center gap-2 px-4 py-2 bg-white/10 backdrop-blur-sm rounded-full border border-white/20 mb-6">
+              <Sparkles className="w-4 h-4 text-yellow-400" />
+              <span className="text-sm font-medium text-white">AI-Powered Job Platform</span>
             </div>
 
-            <h1 className="animate-in slide-in-from-bottom-50 duration-700 mb-12 text-3xl font-black leading-tight text-white md:text-6xl">
-              Find Your Dream Job with AI-Powered Precision
+            <h1 className="animate-in slide-in-from-bottom-50 duration-1000 mb-12 text-3xl font-black leading-tight text-white md:text-6xl">
+              Find Your{' '}
+              <span className="bg-gradient-to-r from-blue-400 to-indigo-400 bg-clip-text text-transparent">
+                Dream Job
+              </span>
+              <br />
+              with AI-Powered Precision
             </h1>
 
-            <p className="animate-in slide-in-from-left-100 duration-500 mt-6 max-w-xl text-lg leading-relaxed text-gray-300">
+            <p className="animate-in slide-in-from-left-100 duration-800 mt-6 max-w-xl text-lg leading-relaxed text-gray-300">
               Discover thousands of opportunities from top companies worldwide.
               AI-powered matching, instant applications, and real-time hiring insights.
             </p>
 
             {/* Search */}
-            <div className={`absolute left-9 md:left-0 ${searchChartTop} duration-700 mt-6 md:mt-16 rounded-3xl border border-white/20 bg-white/40 p-4 shadow-2xl backdrop-blur-xl`}>
+            {/* <div className={`absolute left-9 md:left-0 ${searchChartTop} duration-700 mt-6 md:mt-16 rounded-3xl border border-white/20 bg-white/40 p-4 shadow-2xl backdrop-blur-xl`}>
               <div className="grid gap-4 md:grid-cols-3">
                 <input
                   type="text"
@@ -252,6 +256,24 @@ export default function JobSphereLandingPage() {
                 <button className="rounded-2xl bg-gradient-to-r from-blue-500 to-indigo-600 px-6 py-3 font-semibold text-white shadow-lg transition hover:scale-[1.02]">
                   Search Jobs
                 </button>
+              </div>
+            </div> */}
+            <div className={`absolute left-9 md:left-0 ${searchChartTop} duration-700 mt-6 md:mt-16 rounded-3xl border border-white/20 bg-white/40 p-4 shadow-2xl backdrop-blur-xl`}>
+              <div className="md:w-96">
+                {!isSignedIn && (
+                  <div>
+                    <SignInButton mode="modal">
+                      <button className="w-full rounded-xl px-4 py-2.5 font-medium text-gray-200 hover:bg-white/10 transition">
+                        Sign In
+                      </button>
+                    </SignInButton>
+                    <SignUpButton mode="modal">
+                      <button className="w-full rounded-xl bg-gradient-to-r from-blue-500 to-indigo-600 px-4 py-2.5 font-medium text-white shadow-lg transition">
+                        Get Started
+                      </button>
+                    </SignUpButton>
+                  </div>
+                )}
               </div>
             </div>
 
